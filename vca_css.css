@@ -1,0 +1,310 @@
+/* Foundation */
+:root {
+  --vca-blue: #233b82;
+  --vca-sky: #98c2ec;
+  --text: #1f2937;
+  --muted: #596579;
+  --border: #e2e7ef;
+  --surface: #f5f7fb;
+  --footer: #111827;
+  --container: 1100px;
+  --radius: 12px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: var(--text);
+  background: #fff;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; }
+img { max-width: 100%; }
+h1, h2 { overflow-wrap: anywhere; }
+
+:focus-visible {
+  outline: 3px solid var(--vca-blue);
+  outline-offset: 5px;
+  border-radius: 4px;
+}
+
+.container {
+  width: min(var(--container), calc(100% - 3rem));
+  margin-inline: auto;
+}
+
+/* Demo identification: paired light fill and dark stroke work on all surfaces. */
+.sample-watermark {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-25deg);
+  font-size: clamp(1.75rem, 9vw, 8rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  color: rgba(255, 255, 255, 0.15);
+  -webkit-text-stroke: 1px rgba(35, 59, 130, 0.14);
+  text-shadow: 0 1px 2px rgba(17, 24, 39, 0.08);
+  pointer-events: none;
+  user-select: none;
+  z-index: 9999;
+}
+
+.demo-badge {
+  position: fixed;
+  right: max(0.75rem, env(safe-area-inset-right));
+  bottom: max(0.75rem, env(safe-area-inset-bottom));
+  padding: 0.4rem 0.65rem;
+  border: 1px solid var(--vca-sky);
+  border-radius: 6px;
+  background: var(--vca-blue);
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  line-height: 1.4;
+  pointer-events: none;
+  user-select: none;
+  z-index: 10000;
+}
+
+/* Header */
+.site-header {
+  border-bottom: 1px solid var(--border);
+  background: #fff;
+}
+
+.header-inner {
+  min-height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding-block: 0.65rem;
+}
+
+.site-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--vca-blue);
+  font-size: 1.1rem;
+  font-weight: 750;
+  line-height: 1.25;
+  text-decoration: none;
+  min-width: 0;
+}
+
+.site-logo-image {
+  width: 54px;
+  height: 54px;
+  flex-shrink: 0;
+  object-fit: contain;
+}
+
+.site-nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem 1.25rem;
+}
+
+.site-nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  text-underline-offset: 0.3em;
+}
+
+.site-nav a:hover {
+  color: var(--vca-blue);
+  text-decoration: underline;
+}
+
+/* Hero */
+.hero {
+  background: var(--vca-blue);
+  color: #fff;
+  padding-block: clamp(3rem, 6vw, 5rem);
+}
+
+.hero-grid,
+.about-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(2rem, 4vw, 3.5rem);
+}
+
+.hero-content,
+.about-content { min-width: 0; }
+
+.hero-eyebrow,
+.section-label {
+  margin: 0 0 1rem;
+  font-size: 0.8rem;
+  font-weight: 750;
+  letter-spacing: 0.12em;
+  line-height: 1.5;
+  text-transform: uppercase;
+}
+
+.hero-eyebrow { color: var(--vca-sky); }
+
+.hero h1 {
+  margin: 0;
+  font-size: clamp(2.5rem, 5.8vw, 4.75rem);
+  line-height: 1.06;
+  letter-spacing: -0.035em;
+}
+
+.hero-description {
+  max-width: 43ch;
+  margin: 1.5rem 0 2rem;
+  font-size: clamp(1rem, 1.6vw, 1.15rem);
+}
+
+.hero-image-wrapper {
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: var(--radius);
+  aspect-ratio: 4 / 3;
+  background: var(--surface);
+}
+
+.hero-image {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 0.75rem 1.4rem;
+  background: #fff;
+  color: var(--vca-blue);
+  border-radius: 6px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.button:hover { background: var(--vca-sky); }
+.hero :focus-visible { outline-color: var(--vca-sky); }
+
+/* About */
+.section { padding-block: clamp(3rem, 6vw, 5rem); }
+.section-alt { background: var(--surface); }
+.section-label { color: var(--vca-blue); }
+
+.section h2 {
+  max-width: 24ch;
+  margin: 0 0 1.25rem;
+  font-size: clamp(1.85rem, 3.4vw, 2.75rem);
+  line-height: 1.16;
+  letter-spacing: -0.025em;
+}
+
+.section-copy {
+  max-width: 58ch;
+  margin: 0;
+  font-size: 1.025rem;
+}
+
+.about-image {
+  display: block;
+  width: 100%;
+  aspect-ratio: 6 / 5;
+  object-fit: cover;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+/* One sample announcement */
+.announcement-card {
+  max-width: 800px;
+  padding: clamp(1.25rem, 3vw, 2rem);
+  background: #fff;
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--vca-blue);
+  border-radius: var(--radius);
+}
+
+.announcement-date {
+  margin: 0 0 0.75rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.announcement-card h2 {
+  max-width: 32ch;
+  font-size: clamp(1.5rem, 2.6vw, 2rem);
+  margin-bottom: 1rem;
+}
+
+.announcement-card p:last-child {
+  max-width: 65ch;
+  margin: 0;
+}
+
+/* Footer: bottom space keeps the fixed badge clear of its copy. */
+.site-footer {
+  padding: 2rem 0 3.5rem;
+  background: var(--footer);
+  color: #fff;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.site-footer p { margin: 0.35rem 0; }
+.demo-note { color: #b7c1d1; font-size: 0.8rem; }
+
+/* Responsive layouts */
+@media (max-width: 800px) {
+  .hero-grid,
+  .about-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2rem;
+  }
+
+  .hero,
+  .section { padding-block: 3rem; }
+
+  .hero-image-wrapper,
+  .about-image { aspect-ratio: 16 / 10; }
+
+  .hero-content { max-width: 620px; }
+}
+
+@media (max-width: 650px) {
+  .container { width: calc(100% - 2.5rem); }
+
+  .header-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+    padding-block: 0.75rem;
+  }
+
+  .site-nav { gap: 0.25rem 1.1rem; }
+  .hero h1 { font-size: clamp(2.5rem, 10vw, 3.5rem); }
+  .hero-description { margin-block: 1.25rem 1.5rem; }
+  .demo-badge { font-size: 0.6rem; padding: 0.35rem 0.5rem; }
+}

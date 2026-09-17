@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>VCA Philippines CMS | Login</title>
+
+  <meta
+    name="description"
+    content="VCA Philippines CMS demo login page."
+  >
+
+  <!-- Future CMS stylesheet -->
+  <link rel="stylesheet" href="admin.css">
+</head>
+
+<body>
+
+  <main class="cms-login">
+
+    <section
+      class="cms-login__panel"
+      aria-labelledby="cms-login-title"
+    >
+
+      <!-- CMS Branding -->
+      <header class="cms-login__header">
+
+        <img
+          class="cms-login__logo"
+          src="../assets/vca_phils_logo.png"
+          alt="Victory Churches of Asia Philippines"
+        >
+
+        <p class="cms-login__label">
+          CMS Demo
+        </p>
+
+        <h1 id="cms-login-title">
+          VCA Philippines CMS
+        </h1>
+
+        <p>
+          Sign in to access the content management system demonstration.
+        </p>
+
+      </header>
+
+
+      <!-- Login Form -->
+      <form
+        id="login-form"
+        class="cms-login__form"
+        method="post"
+      >
+
+        <div class="cms-form-field">
+
+          <label for="login-email">
+            Email
+          </label>
+
+          <input
+            id="login-email"
+            name="email"
+            type="email"
+            autocomplete="email"
+            required
+          >
+
+        </div>
+
+
+        <div class="cms-form-field">
+
+          <label for="login-password">
+            Password
+          </label>
+
+          <input
+            id="login-password"
+            name="password"
+            type="password"
+            autocomplete="current-password"
+            required
+          >
+
+        </div>
+
+
+        <!-- Future login status / authentication errors -->
+        <div
+          id="login-status"
+          class="cms-login__status"
+          role="status"
+          aria-live="polite"
+          aria-atomic="true"
+        ></div>
+
+
+        <button
+          id="login-submit"
+          type="submit"
+        >
+          Sign In
+        </button>
+
+      </form>
+
+
+      <!-- Demo Notice -->
+      <aside
+        class="cms-demo-notice"
+        aria-label="CMS demonstration notice"
+      >
+        <strong>Sample Only — CMS Demo</strong>
+
+        <p>
+          This login page is part of a demonstration content management
+          system for VCA Philippines.
+        </p>
+      </aside>
+
+    </section>
+
+  </main>
+
+</body>
+</html>

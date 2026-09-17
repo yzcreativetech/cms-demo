@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>VCA Philippines CMS | Homepage Editor</title>
+
+  <meta
+    name="description"
+    content="VCA Philippines CMS demo homepage editor."
+  >
+
+  <!-- Future CMS stylesheet -->
+  <link rel="stylesheet" href="admin.css">
+</head>
+
+<body>
+
+  <!-- =========================================================
+       ADMIN HEADER
+  ========================================================== -->
+  <header class="admin-header">
+
+    <div class="admin-header__branding">
+      <p class="admin-header__title">
+        VCA Philippines CMS
+      </p>
+
+      <p class="admin-header__demo-label">
+        <strong>SAMPLE ONLY / CMS DEMO</strong>
+      </p>
+    </div>
+
+    <nav
+      class="admin-header__actions"
+      aria-label="CMS account and website actions"
+    >
+      <a
+        id="view-website-link"
+        href="../index.html"
+        target="_blank"
+        rel="noopener"
+      >
+        View Website
+      </a>
+
+      <button
+        id="logout-button"
+        type="button"
+      >
+        Logout
+      </button>
+    </nav>
+
+  </header>
+
+
+  <div class="admin-layout">
+
+    <!-- =======================================================
+         SIDEBAR
+    ======================================================== -->
+    <aside class="admin-sidebar">
+
+      <nav aria-label="CMS navigation">
+        <ul>
+
+          <li>
+            <a href="#">
+              Dashboard
+            </a>
+          </li>
+
+          <li>
+            <a
+              href="./index.html"
+              aria-current="page"
+            >
+              Homepage
+            </a>
+          </li>
+
+        </ul>
+      </nav>
+
+    </aside>
+
+
+    <!-- =======================================================
+         MAIN EDITOR REGION
+    ======================================================== -->
+    <main
+      class="admin-main"
+      aria-labelledby="editor-title"
+    >
+
+      <!-- =====================================================
+           EDITOR TOOLBAR
+      ====================================================== -->
+      <header class="editor-toolbar">
+
+        <div class="editor-toolbar__heading">
+          <h1 id="editor-title">
+            Edit Homepage
+          </h1>
+
+          <p>
+            Update the content displayed on the VCA Philippines homepage.
+          </p>
+        </div>
+
+        <div
+          class="editor-toolbar__history"
+          role="group"
+          aria-label="Editing history controls"
+        >
+          <button
+            id="undo-button"
+            type="button"
+          >
+            Undo
+          </button>
+
+          <button
+            id="redo-button"
+            type="button"
+          >
+            Redo
+          </button>
+        </div>
+
+      </header>
+
+
+      <!-- =====================================================
+           HOMEPAGE EDITOR FORM
+      ====================================================== -->
+      <form
+        id="homepage-editor-form"
+        class="homepage-editor"
+        method="post"
+      >
+
+        <!-- ===================================================
+             SITE IDENTITY
+        ==================================================== -->
+        <section
+          class="editor-section"
+          aria-labelledby="site-identity-heading"
+        >
+
+          <header class="editor-section__header">
+            <h2 id="site-identity-heading">
+              Site Identity
+            </h2>
+
+            <p>
+              Manage the primary logo used by the website.
+            </p>
+          </header>
+
+
+          <div class="editor-field">
+
+            <p>
+              Current Logo
+            </p>
+
+            <img
+              id="site-logo-preview"
+              src="../assets/vca_phils_logo.png"
+              alt="Current VCA Philippines logo preview"
+            >
+
+          </div>
+
+
+          <div class="editor-field">
+
+            <label for="site-logo-input">
+              Replace Logo
+            </label>
+
+            <input
+              id="site-logo-input"
+              name="site-logo"
+              type="file"
+              accept="image/png,image/jpeg,image/webp"
+            >
+
+            <p>
+              Accepted file types: PNG, JPEG, or WebP.
+            </p>
+
+          </div>
+
+        </section>
+
+
+        <!-- ===================================================
+             HERO SECTION
+        ==================================================== -->
+        <section
+          class="editor-section"
+          aria-labelledby="hero-section-heading"
+        >
+
+          <header class="editor-section__header">
+            <h2 id="hero-section-heading">
+              Hero Section
+            </h2>
+
+            <p>
+              Manage the main introductory content displayed at the top
+              of the homepage.
+            </p>
+          </header>
+
+
+          <div class="editor-field">
+
+            <label for="hero-eyebrow">
+              Eyebrow
+            </label>
+
+            <input
+              id="hero-eyebrow"
+              name="hero-eyebrow"
+              type="text"
+            >
+
+          </div>
+
+
+          <div class="editor-field">
+
+            <label for="hero-title">
+              Hero Title
+            </label>
+
+            <input
+              id="hero-title"
+              name="hero-title"
+              type="text"
+            >
+
+          </div>
+
+
+          <div class="editor-field">
+
+            <label for="hero-description">
+              Description
+            </label>
+
+            <textarea
+              id="hero-description"
+              name="hero-description"
+              rows="5"
+            ></textarea>
+
+          </div>
+
+
+          <div class="editor-field">
+
+            <p>
+              Current Hero Image
+            </p>
+
+            <figure class="editor-image-preview">
+
+              <img
+                id="hero-image-preview"
+                src="../assets/hero-default.webp"
+                alt="Current homepage hero image preview"
+              >
+
+              <figcaption>
+                Current homepage hero image
+              </figcaption>
+
+            </figure>
+
+          </div>
+
+
+          <div class="editor-field">
+
+            <label for="hero-image-input">
+              Replace Hero Image
+            </label>
+
+            <input
+              id="hero-image-input"
+              name="hero-image"
+              type="file"
+              accept="image/png,image/jpeg,image/webp"
+            >
+
+            <p>
+              Accepted file types: PNG, JPEG, or WebP.
+            </p>
+
+          </div>
+
+
+          <div class="editor-field">
+
+            <label for="hero-button-text">
+              Button Text
+            </label>
+
+            <input
+              id="hero-button-text"
+              name="hero-button-text"
+              type="text"
+            >
+
+          </div>
+
+
+          <div class="editor-field">
+
+            <label for="hero-button-link">
+              Button Link
+            </label>
+
+            <input
+              id="hero-button-link"
+              name="hero-button-link"
+              type="text"
+            >
+
+          </div>
+
+        </section>
+
+
+        <!-- ===================================================
+             OUR MOVEMENT SECTION
+        ==================================================== -->
+        <section
+          class="editor-section"
+          aria-labelledby="about-section-heading"
+        >
+
+          <header class="editor-section__header">
+            <h2 id="about-section-heading">
+              Our Movement Section
+            </h2>
+
+            <p>
+              Manage the homepage introduction to the VCA movement.
+            </p>
+          </header>
+
+
+          <div class="editor-field">
+
+            <label for="about-label">
+              Section Label
+            </label>
+
+            <input
+              id="about-label"
+              name="about-label"
+              type="text"
+            >
+
+          </div>
+
+
+          <div class="editor-field">
+
+            <label for="about-title">
+              Heading
+            </label>
+
+            <input
+              id="about-title"
+              name="about-title"
+              type="text"
+            >
+
+          </div>
+
+
+          <div class="editor-field">
+
+            <label for="about-description">
+              Description
+            </label>
+
+            <textarea
+              id="about-description"
+              name="about-description"
+              rows="6"
+            ></textarea>
+
+          </div>
+
+
+          <div class="editor-field">
+
+            <p>
+              Current Section Image
+            </p>
+
+            <figure class="editor-image-preview">
+
+              <img
+                id="about-image-preview"
+                src="../assets/movement.webp"
+                alt="Current Our Movement section image preview"
+              >
+
+              <figcaption>
+                Current Our Movement section image
+              </figcaption>
+
+            </figure>
+
+          </div>
+
+
+          <div class="editor-field">
+
+            <label for="about-image-input">
+              Replace Section Image
+            </label>
+
+            <input
+              id="about-image-input"
+              name="about-image"
+              type="file"
+              accept="image/png,image/jpeg,image/webp"
+            >
+
+            <p>
+              Accepted file types: PNG, JPEG, or WebP.
+            </p>
+
+          </div>
+
+        </section>
+
+
+        <!-- ===================================================
+             LATEST ANNOUNCEMENT SECTION
+        ==================================================== -->
+        <section
+          class="editor-section"
+          aria-labelledby="announcement-section-heading"
+        >
+
+          <header class="editor-section__header">
+            <h2 id="announcement-section-heading">
+              Latest Announcement
+            </h2>
+
+            <p>
+              Manage the announcement displayed on the homepage.
+            </p>
+          </header>
+
+
+          <div class="editor-field">
+
+            <label for="announcement-date">
+              Date
+            </label>
+
+            <input
+              id="announcement-date"
+              name="announcement-date"
+              type="text"
+            >
+
+          </div>
+
+
+          <div class="editor-field">
+
+            <label for="announcement-title">
+              Title
+            </label>
+
+            <input
+              id="announcement-title"
+              name="announcement-title"
+              type="text"
+            >
+
+          </div>
+
+
+          <div class="editor-field">
+
+            <label for="announcement-description">
+              Description
+            </label>
+
+            <textarea
+              id="announcement-description"
+              name="announcement-description"
+              rows="5"
+            ></textarea>
+
+          </div>
+
+        </section>
+
+
+        <!-- ===================================================
+             FOOTER SECTION
+        ==================================================== -->
+        <section
+          class="editor-section"
+          aria-labelledby="footer-section-heading"
+        >
+
+          <header class="editor-section__header">
+            <h2 id="footer-section-heading">
+              Footer
+            </h2>
+
+            <p>
+              Manage the primary footer text displayed on the website.
+            </p>
+          </header>
+
+
+          <div class="editor-field">
+
+            <label for="footer-text">
+              Footer Text
+            </label>
+
+            <input
+              id="footer-text"
+              name="footer-text"
+              type="text"
+            >
+
+          </div>
+
+        </section>
+
+
+        <!-- ===================================================
+             EDITOR STATUS
+        ==================================================== -->
+        <div
+          id="editor-status"
+          class="editor-status"
+          role="status"
+          aria-live="polite"
+          aria-atomic="true"
+        ></div>
+
+
+        <!-- ===================================================
+             BOTTOM ACTIONS
+        ==================================================== -->
+        <footer class="editor-actions">
+
+          <div class="editor-actions__secondary">
+
+            <button
+              id="restore-default-button"
+              type="button"
+            >
+              Restore Default
+            </button>
+
+          </div>
+
+
+          <div class="editor-actions__primary">
+
+            <button
+              id="cancel-button"
+              type="button"
+            >
+              Cancel
+            </button>
+
+            <button
+              id="save-button"
+              type="submit"
+            >
+              Save Changes
+            </button>
+
+          </div>
+
+        </footer>
+
+      </form>
+
+    </main>
+
+  </div>
+
+</body>
+</html>
