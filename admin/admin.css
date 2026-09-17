@@ -227,6 +227,30 @@ button[aria-busy="true"] { cursor: progress; }
 .editor-image-preview figcaption { margin-top: 0.5rem; color: var(--text-muted); font-size: 0.8rem; }
 .editor-actions { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; padding-top: 1.25rem; border-top: 1px solid var(--border-color); }
 
+/* One static announcement/event entry; controls are presentation only. */
+.announcement-section__header,
+.announcement-entry__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.announcement-section__header > div { flex: 1 1 260px; min-width: 0; }
+.announcement-entry {
+  min-width: 0;
+  padding: clamp(1rem, 2vw, 1.5rem);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+}
+.announcement-entry__header { align-items: center; margin-bottom: 1.25rem; }
+.announcement-entry__header h3 { margin: 0; font-size: 1rem; line-height: 1.4; }
+#add-announcement-button { color: var(--vca-blue); border-color: var(--vca-sky-blue); }
+#add-announcement-button:hover:not(:disabled) { background: #edf5fd; border-color: var(--vca-blue); }
+#delete-announcement-button { color: var(--error); border-color: #e5b6bc; }
+#delete-announcement-button:hover:not(:disabled) { background: #fff2f3; border-color: var(--error); }
+#delete-announcement-button:focus-visible { outline-color: var(--error); }
+
 /* Future status states: apply classes to the existing live regions.
    State text will be supplied later; CSS does not generate messages. */
 .cms-login__status, .editor-status { border-radius: 6px; font-size: 0.9rem; overflow-wrap: anywhere; }

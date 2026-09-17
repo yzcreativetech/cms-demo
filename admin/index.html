@@ -448,67 +448,80 @@
 
 
         <!-- ===================================================
-             LATEST ANNOUNCEMENT SECTION
+             ANNOUNCEMENTS & EVENTS SECTION
         ==================================================== -->
         <section
           class="editor-section"
           aria-labelledby="announcement-section-heading"
         >
 
-          <header class="editor-section__header">
-            <h2 id="announcement-section-heading">
-              Latest Announcement
-            </h2>
+          <header class="editor-section__header announcement-section__header">
+            <div>
+              <h2 id="announcement-section-heading">
+                Announcements &amp; Events
+              </h2>
 
-            <p>
-              Manage the announcement displayed on the homepage.
-            </p>
+              <p>
+                Manage announcements and events displayed on the website.
+              </p>
+            </div>
+            <button id="add-announcement-button" type="button">
+              + Add Announcement / Event
+            </button>
           </header>
 
 
-          <div class="editor-field">
+          <section class="announcement-entry" aria-labelledby="announcement-entry-heading">
+            <header class="announcement-entry__header">
+              <h3 id="announcement-entry-heading">Announcement / Event 1</h3>
+              <button id="delete-announcement-button" type="button" aria-describedby="announcement-entry-heading">Delete</button>
+            </header>
 
-            <label for="announcement-date">
-              Date
-            </label>
+            <div class="editor-field">
 
-            <input
-              id="announcement-date"
-              name="announcement-date"
-              type="text"
-            >
+              <label for="announcement-date">
+                Date
+              </label>
 
-          </div>
+              <input
+                id="announcement-date"
+                name="announcement-date"
+                type="text"
+              >
 
-
-          <div class="editor-field">
-
-            <label for="announcement-title">
-              Title
-            </label>
-
-            <input
-              id="announcement-title"
-              name="announcement-title"
-              type="text"
-            >
-
-          </div>
+            </div>
 
 
-          <div class="editor-field">
+            <div class="editor-field">
 
-            <label for="announcement-description">
-              Description
-            </label>
+              <label for="announcement-title">
+                Title
+              </label>
 
-            <textarea
-              id="announcement-description"
-              name="announcement-description"
-              rows="5"
-            ></textarea>
+              <input
+                id="announcement-title"
+                name="announcement-title"
+                type="text"
+              >
 
-          </div>
+            </div>
+
+
+            <div class="editor-field">
+
+              <label for="announcement-description">
+                Description
+              </label>
+
+              <textarea
+                id="announcement-description"
+                name="announcement-description"
+                rows="5"
+              ></textarea>
+
+            </div>
+
+          </section>
 
         </section>
 
