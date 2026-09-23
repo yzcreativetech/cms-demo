@@ -199,6 +199,80 @@
 
 
         <!-- ===================================================
+             BRAND THEME
+        ==================================================== -->
+        <section class="editor-section" aria-labelledby="brand-theme-heading">
+          <header class="editor-section__header">
+            <h2 id="brand-theme-heading">Brand Theme</h2>
+            <p>Choose the site's colors and typography.</p>
+          </header>
+
+          <div class="brand-theme__colors">
+            <div class="editor-field">
+              <label for="theme_primary_color">Primary Color</label>
+              <div class="brand-theme__color-control">
+                <label class="brand-theme__picker-label" for="theme_primary_color_picker">Primary Color picker</label>
+                <input id="theme_primary_color_picker" type="color" value="#233b82">
+                <input id="theme_primary_color" name="theme_primary_color" type="text" value="#233B82" maxlength="7" placeholder="#233B82" autocomplete="off" inputmode="text">
+              </div>
+            </div>
+            <div class="editor-field">
+              <label for="theme_secondary_color">Secondary Color</label>
+              <div class="brand-theme__color-control">
+                <label class="brand-theme__picker-label" for="theme_secondary_color_picker">Secondary Color picker</label>
+                <input id="theme_secondary_color_picker" type="color" value="#98c2ec">
+                <input id="theme_secondary_color" name="theme_secondary_color" type="text" value="#98C2EC" maxlength="7" placeholder="#98C2EC" autocomplete="off" inputmode="text">
+              </div>
+            </div>
+            <div class="editor-field">
+              <label for="theme_background_color">Background Color</label>
+              <div class="brand-theme__color-control">
+                <label class="brand-theme__picker-label" for="theme_background_color_picker">Background Color picker</label>
+                <input id="theme_background_color_picker" type="color" value="#ffffff">
+                <input id="theme_background_color" name="theme_background_color" type="text" value="#FFFFFF" maxlength="7" placeholder="#FFFFFF" autocomplete="off" inputmode="text">
+              </div>
+            </div>
+            <div class="editor-field">
+              <label for="theme_text_color">Text Color</label>
+              <div class="brand-theme__color-control">
+                <label class="brand-theme__picker-label" for="theme_text_color_picker">Text Color picker</label>
+                <input id="theme_text_color_picker" type="color" value="#1f2937">
+                <input id="theme_text_color" name="theme_text_color" type="text" value="#1F2937" maxlength="7" placeholder="#1F2937" autocomplete="off" inputmode="text">
+              </div>
+            </div>
+          </div>
+
+          <div class="brand-theme__fonts">
+            <div class="editor-field">
+              <label for="theme_heading_font">Heading Font</label>
+              <select id="theme_heading_font" name="theme_heading_font">
+                <option value="system-default" selected>System Default</option>
+                <option value="poppins">Poppins</option>
+                <option value="montserrat">Montserrat</option>
+                <option value="inter">Inter</option>
+                <option value="roboto">Roboto</option>
+                <option value="open-sans">Open Sans</option>
+                <option value="lato">Lato</option>
+                <option value="merriweather">Merriweather</option>
+              </select>
+            </div>
+            <div class="editor-field">
+              <label for="theme_body_font">Body Font</label>
+              <select id="theme_body_font" name="theme_body_font">
+                <option value="system-default" selected>System Default</option>
+                <option value="poppins">Poppins</option>
+                <option value="montserrat">Montserrat</option>
+                <option value="inter">Inter</option>
+                <option value="roboto">Roboto</option>
+                <option value="open-sans">Open Sans</option>
+                <option value="lato">Lato</option>
+                <option value="merriweather">Merriweather</option>
+              </select>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================
              HERO SECTION
         ==================================================== -->
         <section
