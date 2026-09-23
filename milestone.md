@@ -24,6 +24,7 @@ admin/admin.css               Login and editor styles
 supabase/schema.sql           Two-table schema, triggers, RLS, public SELECT policies
 supabase/seed.sql             Canonical homepage and announcement data
 supabase/reset.sql            Transactional content reset to canonical data
+supabase/security.sql         Approved admin grants, RLS, and Storage security
 ```
 
 Future JavaScript services and page modules will be added as their steps are implemented. Supabase Auth, Storage, and browser integration are not present in these local files yet.
@@ -78,7 +79,7 @@ The public demo homepage contains the logo, hero, Our Movement, one announcement
 
 The Supabase project and the two-table schema, canonical seed, and reset are the approved Step 4 baseline. `supabase/schema.sql`, `supabase/seed.sql`, and `supabase/reset.sql` document it locally. The single-row constraint, repeatable announcement structure, automatic `updated_at` triggers, RLS on both tables, and public SELECT policies are complete. Anonymous writes have no policy granting access. The canonical seed has one row in each table and matches the static homepage.
 
-Step 4 database checks reported complete: seed queries, single-row enforcement, `updated_at`, RLS, and public-read policies. The local SQL files document this state; they do not themselves prove the remote project state. Authenticated admin write policies and Storage remain future work.
+Step 4 database checks reported complete: seed queries, single-row enforcement, `updated_at`, RLS, and public-read policies. The local SQL files document this state; they do not themselves prove the remote project state. Authenticated admin write policies and Storage security are documented in Step 6.
 
 # STEP 5 — Authentication Foundation
 **Status: COMPLETE**
@@ -104,14 +105,16 @@ JAVASCRIPT THREAD
 
 
 # STEP 6 — Admin RLS and Storage Security
-**Status: PENDING**
+**Status: COMPLETE**
 
-After the admin user exists, add narrowly scoped authenticated UPDATE on the homepage row and INSERT/UPDATE/DELETE for announcements as needed. Create the image Storage bucket and policies for authenticated uploads and the intended public reads. Keep existing public SELECT policies.
+`supabase/security.sql` documents the approved admin UUID-scoped grants and policies, using `YOUR-ADMIN-UUID` for reuse. Public SELECT remains enabled. The approved admin can UPDATE homepage row `id = 1` and INSERT/UPDATE/DELETE its announcements; homepage INSERT/DELETE remain unavailable.
 
-**Acceptance:** The intended admin can perform required database writes and uploads; anonymous writes and uploads fail through direct API attempts; public content and published images remain readable; policies are tied to the approved admin identity rather than UI visibility.
+The dashboard-configured public `cms-demo` bucket accepts PNG/JPEG/WebP files up to 5 MB. Admin uploads are limited to `logos`, `hero`, and `movement`, using new unique filenames. Storage UPDATE/DELETE policies are intentionally absent.
+
+**Verification reported complete:** Direct API/browser tests passed for public homepage reads, admin database writes, announcement CRUD, admin Storage upload, anonymous write/upload blocking, and public image reads while logged out. This repository task documents those results without connecting to Supabase or executing SQL.
 
 # STEP 7 — CMS Editor State
-**Status: PENDING**
+**Status: NEXT**
 
 Build form-to-state mapping for all homepage fields and `announcements[]`, including Add/Delete and image selection metadata. Track `defaultState`, `savedState`, and `currentState`. Keep DOM rendering separate from data access.
 
@@ -176,9 +179,9 @@ Publish the approved demo after QA. Verify relative paths under the GitHub Pages
 | 2 | CMS HTML Shell | COMPLETE |
 | 3 | CMS Styling + Brand Theme UI | COMPLETE |
 | 4 | Supabase Schema + Seed | COMPLETE |
-| 5 | Authentication Foundation | NEXT |
-| 6 | Admin RLS + Storage Security | PENDING |
-| 7 | CMS Editor State | PENDING |
+| 5 | Authentication Foundation | COMPLETE |
+| 6 | Admin RLS + Storage Security | COMPLETE |
+| 7 | CMS Editor State | NEXT |
 | 8 | Undo / Redo / Cancel / Restore Default | PENDING |
 | 9 | Content Load / Save | PENDING |
 | 10 | Image Upload | PENDING |
