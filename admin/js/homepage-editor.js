@@ -1,31 +1,34 @@
-import { loadEditorContent } from "./editor-data.js";
+import { loadEditorContent, createEditorPersistence, EditorSaveError } from "./editor-data.js";
 import { createEditorState } from "./editor-state.js";
 import { createEditorView, fieldMap, imageMap } from "./editor-view.js";
-import { validateEditorState, validateImage } from "./editor-validation.js";
+import { validateEditorState, validateImage, validateForSave } from "./editor-validation.js";
 
 const form = document.getElementById("homepage-editor-form");
 const view = createEditorView(form);
 let editor;
 const selectionErrors = new Map();
-const deferredControls = ["save-button"];
+const persistence = createEditorPersistence();
+let isSaving = false;
 const historyControls = ["undo-button", "redo-button", "cancel-button", "restore-default-button"];
-historyControls.forEach(id => { document.getElementById(id).disabled = true; });
-deferredControls.forEach(id => {
-  const button = document.getElementById(id);
-  button.disabled = true;
-  button.title = "Available in a later CMS milestone.";
-});
+[...historyControls, "save-button"].forEach(id => { document.getElementById(id).disabled = true; });
+
+function updateControls() {
+  form.querySelectorAll("input, textarea, select, button").forEach(control => { control.disabled = isSaving; });
+  document.getElementById("undo-button").disabled = isSaving || !editor.canUndo;
+  document.getElementById("redo-button").disabled = isSaving || !editor.canRedo;
+  document.getElementById("cancel-button").disabled = isSaving || !editor.isDirty();
+  document.getElementById("restore-default-button").disabled = isSaving || editor.isDefault();
+  document.getElementById("save-button").disabled = isSaving || (!editor.isDirty() && !persistence.hasPendingWrites);
+  form.setAttribute("aria-busy", String(isSaving));
+}
 
 function feedback() {
-  document.getElementById("undo-button").disabled = !editor.canUndo;
-  document.getElementById("redo-button").disabled = !editor.canRedo;
-  document.getElementById("cancel-button").disabled = !editor.isDirty();
-  document.getElementById("restore-default-button").disabled = editor.isDefault();
+  updateControls();
   view.feedback([...validateEditorState(editor.currentState), ...selectionErrors.values()], editor.isDirty());
 }
 
 function restoreEditor(action) {
-  if (!editor) return;
+  if (!editor || isSaving) return;
   try {
     action(view.render);
     selectionErrors.clear();
@@ -43,20 +46,20 @@ function restoreEditor(action) {
 document.getElementById("undo-button").addEventListener("click", () => restoreEditor(render => editor.undo(render)));
 document.getElementById("redo-button").addEventListener("click", () => restoreEditor(render => editor.redo(render)));
 document.getElementById("cancel-button").addEventListener("click", () => {
-  if (!editor?.isDirty()) return;
+  if (!editor?.isDirty() || isSaving) return;
   if (window.confirm("Discard all unsaved changes and return to the last saved version?")) {
-    restoreEditor(render => editor.cancel(render));
+    restoreEditor(render => { editor.cancel(render); view.lockAnnouncements(); });
   }
 });
 document.getElementById("restore-default-button").addEventListener("click", () => {
-  if (!editor || editor.isDefault()) return;
+  if (!editor || isSaving || editor.isDefault()) return;
   if (window.confirm("Restore the editor to the default homepage content?\n\nThis will replace your current unsaved edits, but nothing will be saved until you click Save.")) {
     restoreEditor(render => editor.restoreDefaults(render));
   }
 });
 
 function handleEdit(event) {
-  if (!editor) return;
+  if (!editor || isSaving) return;
   const input = event.target;
   if (input.type === "file") {
     if (event.type !== "change") return;
@@ -73,6 +76,7 @@ function handleEdit(event) {
       view.renderImages(editor.currentState);
     }
   } else if (input.dataset.field) {
+    if (input.readOnly) return;
     editor.setAnnouncement(input.closest(".announcement-entry").dataset.clientId, input.dataset.field, input.value);
   } else {
     const id = input.id.replace(/_picker$/, "");
@@ -87,17 +91,51 @@ function handleEdit(event) {
 
 form.addEventListener("input", handleEdit);
 form.addEventListener("change", handleEdit);
-form.addEventListener("submit", event => {
+form.addEventListener("submit", async event => {
   event.preventDefault();
-  if (editor) feedback();
+  if (!editor || isSaving || (!editor.isDirty() && !persistence.hasPendingWrites)) return;
+  const snapshot = editor.currentState;
+  const errors = [...validateForSave(snapshot), ...selectionErrors.values()];
+  if (errors.length) {
+    view.feedback(errors, editor.isDirty());
+    return;
+  }
+  isSaving = true;
+  updateControls();
+  view.showStatus("Saving changes...", "loading");
+  try {
+    const persisted = await persistence.save(snapshot, editor.savedState);
+    editor.acceptSavedState(persisted, view.render);
+    persistence.acknowledge();
+    view.lockAnnouncements();
+    view.showStatus("Changes saved successfully.", "ready");
+  } catch (error) {
+    // Service errors are sanitized; never display backend objects/tokens.
+    view.showStatus(error instanceof EditorSaveError ? error.message
+      : "Unable to finish Save. Some changes may already be stored. Your edits are retained; retry Save.", "error");
+  } finally {
+    isSaving = false;
+    updateControls();
+  }
 });
 form.addEventListener("click", event => {
-  if (!editor) return;
+  if (!editor || isSaving) return;
   const button = event.target.closest("button");
   if (!button) return;
   let addedId;
-  if (button.id === "add-announcement-button") addedId = editor.addAnnouncement();
+  if (button.hasAttribute("data-edit-announcement")) {
+    const entry = button.closest(".announcement-entry");
+    const editing = button.getAttribute("aria-pressed") !== "true";
+    view.setAnnouncementEditing(entry.dataset.clientId, editing);
+    if (editing) entry.querySelector("input, textarea").focus();
+    return;
+  }
+  if (button.id === "add-announcement-button") {
+    addedId = editor.addAnnouncement();
+    view.setAnnouncementEditing(addedId, true);
+  }
   else if (button.hasAttribute("data-delete-announcement")) {
+    if (!window.confirm("Remove this announcement / event?\n\nIt will be removed from the website only after you click Save.")) return;
     editor.deleteAnnouncement(button.closest(".announcement-entry").dataset.clientId);
   } else return;
   view.renderAnnouncements(editor.currentState.announcements);
@@ -109,12 +147,12 @@ form.addEventListener("click", event => {
 async function initialize() {
   const controls = [...form.querySelectorAll("input, textarea, select, button")];
   controls.forEach(control => { control.disabled = true; });
-  view.showStatus("Loading saved homepage content…", "loading");
+  view.showStatus("Loading saved homepage content...", "loading");
   try {
     editor = createEditorState(await loadEditorContent());
     view.render(editor.currentState);
     form.querySelectorAll("input, textarea, select, button").forEach(control => {
-      control.disabled = deferredControls.includes(control.id);
+      control.disabled = false;
     });
     feedback();
   } catch {

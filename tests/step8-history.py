@@ -1,4 +1,4 @@
-﻿"""Run with Python and installed Chrome; serves local fixtures, never Supabase."""
+"""Run with Python and installed Chrome; serves local fixtures, never Supabase."""
 from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler
 from pathlib import Path
 import subprocess
@@ -33,6 +33,7 @@ try {
   click('redo'); check('Redo', field('hero-title').value === 'B' && button('redo').disabled);
   edit('hero-button-text', 'CTA');
   const rowTitle = document.querySelector('[data-field="announcement_title"]');
+  document.querySelector('[data-edit-announcement]').click();
   edit(rowTitle.id, 'Event B');
   click('undo'); check('Consecutive edits: announcement', document.querySelector('[data-field="announcement_title"]').value === defaultContent.announcements[0].announcement_title);
   click('undo'); check('Consecutive edits: CTA', field('hero-button-text').value === defaultContent.hero_button_text);
@@ -103,7 +104,7 @@ class Handler(SimpleHTTPRequestHandler):
             self.send_text(html, 'text/html')
         elif self.path == '/test.js': self.send_text(TEST, 'text/javascript')
         elif self.path == '/admin/js/editor-data.js':
-            self.send_text('import {defaultContent} from "./editor-defaults.js"; export async function loadEditorContent(){return {...defaultContent, hero_title:"Saved title"};}', 'text/javascript')
+            self.send_text('import {defaultContent} from "./editor-defaults.js"; export class EditorSaveError extends Error {} export function createEditorPersistence(){return {hasPendingWrites:false};} export async function loadEditorContent(){return {...defaultContent, hero_title:"Saved title"};}', 'text/javascript')
         else: super().do_GET()
     def send_text(self, text, kind):
         self.send_response(200); self.send_header('Content-Type', kind); self.end_headers(); self.wfile.write(text.encode())

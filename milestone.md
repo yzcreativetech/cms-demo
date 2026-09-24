@@ -124,29 +124,37 @@ Implemented under `admin/js`: canonical defaults, isolated editor state, read-on
 
 **Verification:** Headless Chrome passed 21 state/rendering checks and 19 controller interaction checks using local fixtures: clone isolation, revert-to-clean, repeated Add/Delete, metadata preservation, repeated rendering, unique IDs/labels, scalar mapping, validation, file previews/rejection, disabled deferred controls, and submit prevention. Browser module parsing and `git diff --check` passed. No editor write/upload calls exist; auth modules are unchanged. Live Supabase loading and authenticated login/logout were not exercised in these fixture tests.
 
-**Deferred:** Save and uploads remain disabled/unimplemented. Step 8 now implements Undo/Redo, Cancel, and Restore Default as described below. There is no automatic fallback masquerading as saved data; broader load/save behavior remains Step 9.
+**Follow-up:** Steps 8 and 9 now implement history controls and content Save. Image upload remains Step 10. There is no automatic fallback masquerading as saved data.
 
 # STEP 8 — Undo, Redo, Cancel, Restore Default
-**Status: IMPLEMENTATION COMPLETE — FINAL ACCEPTANCE PENDING STEP 9**
+**Status: COMPLETE**
 
 Add browser-side history for unsaved editor changes. Cancel restores `savedState`; Restore Default loads `defaultState` only after confirmation and does not save. Define predictable history behavior after Save and for image previews.
 
 **Acceptance:** Undo/Redo work across consecutive edits; a new edit clears redo history; Cancel restores saved text and previews; Restore Default loads canonical values without a database write; controls show appropriate disabled states.
 
-**Status note:** All currently testable Step 8 behavior passed automated browser tests and manual browser smoke tests confirmed by the user. Save-dependent history-boundary acceptance remains pending Step 9. The existing `acceptSavedState()` hook must be called only after a successful Save; failed Save must leave it uncalled so edits and history remain intact.
+**Status note:** All currently testable Step 8 behavior passed automated browser tests and user-confirmed manual smoke tests. Step 9 controller/service fixtures now close both remaining acceptance checks: successful Save calls `acceptSavedState()` after persistence completes and clears history; failed Save leaves saved/current state and both history stacks intact.
 
 **Implementation:** History uses complete snapshots inside the existing editor-state module, including announcements and selected immutable Files. Identical events are skipped. Cancel confirms and clears history; confirmed Restore Default is unsaved and undoable. The existing renderer restores all fields and previews, recreating object URLs from Files. Failed history renders preserve state and stacks. Controls reflect available history and dirty state.
 
 **Verification:** `python tests/step8-history.py` passed 29 headless Chrome checks against local fixtures without Supabase access. Coverage includes consecutive Undo/Redo, redo invalidation, confirmations, announcement Add/Delete, valid restored image URLs, reload without persistence, clone isolation, render-failure preservation, and state-level Save boundaries. No non-GET requests or uncaught browser errors occurred. Source audit confirms history controls contain no database or upload calls.
 
-**Pending Step 9:** Successful Save history boundary and failed Save history preservation require the real Save implementation. State-level hook tests pass; live persistence integration is not yet verified.
-
 # STEP 9 — Content Load and Save
-**Status: PENDING**
+**Status: COMPLETE**
 
 Load `homepage_content` row `id = 1` and ordered `homepage_announcements` into editor state. Validate before Save; persist edits to the existing row and announcement rows. Update `savedState` only after success. Prevent duplicate submission and preserve unsaved work on failure.
 
 **Acceptance:** The editor loads current saved data; changes persist and reload; Add/Delete map to repeatable rows; failures remain retryable without losing edits; no second homepage row is created.
+
+**Implementation:** The existing `editor-data.js` service loads singleton row 1 and announcements ordered by `sort_order`, then `id`. Save validates a cloned current-state snapshot, updates only homepage row 1, updates existing announcement IDs, inserts new rows and maps returned IDs, and deletes removed saved rows. Persisted order follows the editor array. The controller locks editing/history during Save and prevents duplicate submissions. Only full success advances the baseline and resets history.
+
+**Verification:** `python tests/step9-save.py` passed 46 headless Chrome fixture checks using the real controller, state, renderer, and data service with an in-memory Supabase client substitute. Coverage includes load, multi-field Save/reload, announcement CRUD/order, generated IDs, validation, duplicate submissions, both Step 8 Save boundaries, partial failures, retries, lost insert/delete responses, pending images, missing singleton, auth rejection, and console/history write audit. All 29 Step 8 regression checks also pass. A live read-only public query confirmed exactly one homepage row (`id = 1`, Content-Range `0-0/1`). No live database writes were performed.
+
+**Final acceptance:** The user confirmed the other live Step 9 tests, including authenticated Save/reload and authorization behavior. The final live read-only singleton query again returned row count 1, IDs `[1]` (Content-Range `0-0/1`). This task performed no live writes. All 29 Step 8 and 46 Step 9 fixture checks passed, including 16 added announcement safety checks.
+
+**Announcement safeguards:** Loaded/default cards start read-only. Edit unlocks only its card; Done Editing locks it without discarding unsaved content. New cards start editable. Edit mode is view-only, creates no history, and survives Undo/Redo; successful Save and CMS Cancel lock cards again. Delete confirmation precedes any state/history change for both persisted and new cards. Confirmed deletion remains undoable and only global Save persists it. Existing global Save architecture is unchanged.
+
+**Limitations:** No atomic Save RPC exists. Multi-request Save can partially persist; errors preserve the editor and report that risk. A session-only operation journal prevents duplicate acknowledged inserts and reconciles a lost insert response against newly visible matching rows. If that result is missing or ambiguous, further writes pause rather than blindly insert again; external verification is needed if retries cannot resolve it. This is a single-editor demo, without concurrent-edit conflict resolution. Cancel affects browser state only and cannot undo partial database writes. The journal is not persisted across reloads. Image uploads remain Step 10: Save rejects pending local Files while retaining previews/history; existing image paths/URLs can be saved.
 
 # STEP 10 — Image Upload
 **Status: PENDING**
@@ -196,8 +204,8 @@ Publish the approved demo after QA. Verify relative paths under the GitHub Pages
 | 5 | Authentication Foundation | COMPLETE |
 | 6 | Admin RLS + Storage Security | COMPLETE |
 | 7 | CMS Editor State | COMPLETE |
-| 8 | Undo / Redo / Cancel / Restore Default | IMPLEMENTATION COMPLETE — FINAL ACCEPTANCE PENDING STEP 9 |
-| 9 | Content Load / Save | PENDING |
+| 8 | Undo / Redo / Cancel / Restore Default | COMPLETE |
+| 9 | Content Load / Save | COMPLETE |
 | 10 | Image Upload | PENDING |
 | 11 | Public Homepage ↔ Supabase | PENDING |
 | 12 | Security QA | PENDING |

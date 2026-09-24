@@ -13,6 +13,27 @@ export function createEditorView(form) {
   const container = document.createElement("div");
   form.querySelector(".announcement-entry").replaceWith(container);
   const previews = new Map();
+  // UI preferences only: retained across Undo/Redo, never part of content snapshots.
+  const announcementEditing = new Map();
+
+  function applyAnnouncementMode(entry) {
+    const editing = announcementEditing.get(entry.dataset.clientId) === true;
+    entry.querySelectorAll("input, textarea").forEach(input => { input.readOnly = !editing; });
+    const button = entry.querySelector("[data-edit-announcement]");
+    button.textContent = editing ? "Done Editing" : "Edit";
+    button.setAttribute("aria-pressed", String(editing));
+  }
+
+  function setAnnouncementEditing(clientId, editing) {
+    announcementEditing.set(clientId, editing);
+    const entry = [...container.children].find(item => item.dataset.clientId === clientId);
+    if (entry) applyAnnouncementMode(entry);
+  }
+
+  function lockAnnouncements() {
+    announcementEditing.clear();
+    [...container.children].forEach(applyAnnouncementMode);
+  }
   const status = document.getElementById("editor-status");
 
   function showStatus(message, kind) {
@@ -39,11 +60,11 @@ export function createEditorView(form) {
         }
       });
       entry.querySelector("h3").textContent = `Announcement / Event ${index + 1}`;
-      entry.querySelector("button").dataset.deleteAnnouncement = "";
       entry.querySelectorAll("input, textarea").forEach(input => {
         input.dataset.field = input.name.replaceAll("-", "_");
         input.value = row[input.dataset.field];
       });
+      applyAnnouncementMode(entry);
       fragment.append(entry);
     });
     container.replaceChildren(fragment);
@@ -105,13 +126,13 @@ export function createEditorView(form) {
         input.setAttribute("aria-describedby", "editor-status");
       }
     });
-    if (errors.length) showStatus(`Validation problem${dirty ? " — unsaved changes" : ""}: ${errors.map(error => error.message).join(" ")}`, "error");
-    else showStatus(dirty ? "Unsaved changes. Saving is not available yet; changes stay in this tab." : "Loaded / ready. Saving is not available yet.", dirty ? "warning" : "ready");
+    if (errors.length) showStatus(`Validation problem${dirty ? " \u2014 unsaved changes" : ""}: ${errors.map(error => error.message).join(" ")}`, "error");
+    else showStatus(dirty ? "Unsaved changes. Click Save Changes to persist them." : "Loaded / ready.", dirty ? "warning" : "ready");
   }
 
   function dispose() {
     previews.forEach(preview => { if (preview) URL.revokeObjectURL(preview.url); });
     previews.clear();
   }
-  return { render, renderAnnouncements, renderImages, syncColor, feedback, showStatus, dispose };
+  return { setAnnouncementEditing, lockAnnouncements, render, renderAnnouncements, renderImages, syncColor, feedback, showStatus, dispose };
 }

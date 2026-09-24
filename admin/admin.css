@@ -283,6 +283,7 @@ button[aria-busy="true"] { cursor: progress; }
   border-radius: 6px;
 }
 .announcement-entry__header { align-items: center; margin-bottom: 1.25rem; }
+.announcement-entry__actions { display: flex; flex-wrap: wrap; gap: 0.5rem; }
 .announcement-entry__header h3 { margin: 0; font-size: 1rem; line-height: 1.4; }
 #add-announcement-button { color: var(--vca-blue); border-color: var(--vca-sky-blue); }
 #add-announcement-button:hover:not(:disabled) { background: #edf5fd; border-color: var(--vca-blue); }

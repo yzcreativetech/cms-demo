@@ -548,7 +548,10 @@
           <section class="announcement-entry" aria-labelledby="announcement-entry-heading">
             <header class="announcement-entry__header">
               <h3 id="announcement-entry-heading">Announcement / Event 1</h3>
-              <button id="delete-announcement-button" type="button" aria-describedby="announcement-entry-heading">Delete</button>
+              <div class="announcement-entry__actions">
+                <button id="edit-announcement-button" type="button" data-edit-announcement aria-pressed="false" aria-describedby="announcement-entry-heading">Edit</button>
+                <button id="delete-announcement-button" type="button" data-delete-announcement aria-describedby="announcement-entry-heading">Delete</button>
+              </div>
             </header>
 
             <div class="editor-field">
