@@ -53,6 +53,8 @@ export function createEditorView(form) {
     for (const [prefix, field] of Object.entries(imageMap)) {
       const file = state.media[field].file;
       let preview = previews.get(field);
+      // History retains immutable Files, never these URLs. Recreate a URL when
+      // restoring a File; only the currently displayed preview needs a live URL.
       if (preview?.file !== file) {
         if (preview) URL.revokeObjectURL(preview.url);
         preview = file ? { file, url: URL.createObjectURL(file) } : null;

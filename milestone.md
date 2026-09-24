@@ -124,14 +124,22 @@ Implemented under `admin/js`: canonical defaults, isolated editor state, read-on
 
 **Verification:** Headless Chrome passed 21 state/rendering checks and 19 controller interaction checks using local fixtures: clone isolation, revert-to-clean, repeated Add/Delete, metadata preservation, repeated rendering, unique IDs/labels, scalar mapping, validation, file previews/rejection, disabled deferred controls, and submit prevention. Browser module parsing and `git diff --check` passed. No editor write/upload calls exist; auth modules are unchanged. Live Supabase loading and authenticated login/logout were not exercised in these fixture tests.
 
-**Deferred:** Save, uploads, Undo/Redo, Cancel, and Restore Default remain disabled/unimplemented. There is no automatic fallback masquerading as saved data. Step 8 is next; broader load/save behavior remains Step 9.
+**Deferred:** Save and uploads remain disabled/unimplemented. Step 8 now implements Undo/Redo, Cancel, and Restore Default as described below. There is no automatic fallback masquerading as saved data; broader load/save behavior remains Step 9.
 
 # STEP 8 — Undo, Redo, Cancel, Restore Default
-**Status: NEXT**
+**Status: IMPLEMENTATION COMPLETE — FINAL ACCEPTANCE PENDING STEP 9**
 
 Add browser-side history for unsaved editor changes. Cancel restores `savedState`; Restore Default loads `defaultState` only after confirmation and does not save. Define predictable history behavior after Save and for image previews.
 
 **Acceptance:** Undo/Redo work across consecutive edits; a new edit clears redo history; Cancel restores saved text and previews; Restore Default loads canonical values without a database write; controls show appropriate disabled states.
+
+**Status note:** All currently testable Step 8 behavior passed automated browser tests and manual browser smoke tests confirmed by the user. Save-dependent history-boundary acceptance remains pending Step 9. The existing `acceptSavedState()` hook must be called only after a successful Save; failed Save must leave it uncalled so edits and history remain intact.
+
+**Implementation:** History uses complete snapshots inside the existing editor-state module, including announcements and selected immutable Files. Identical events are skipped. Cancel confirms and clears history; confirmed Restore Default is unsaved and undoable. The existing renderer restores all fields and previews, recreating object URLs from Files. Failed history renders preserve state and stacks. Controls reflect available history and dirty state.
+
+**Verification:** `python tests/step8-history.py` passed 29 headless Chrome checks against local fixtures without Supabase access. Coverage includes consecutive Undo/Redo, redo invalidation, confirmations, announcement Add/Delete, valid restored image URLs, reload without persistence, clone isolation, render-failure preservation, and state-level Save boundaries. No non-GET requests or uncaught browser errors occurred. Source audit confirms history controls contain no database or upload calls.
+
+**Pending Step 9:** Successful Save history boundary and failed Save history preservation require the real Save implementation. State-level hook tests pass; live persistence integration is not yet verified.
 
 # STEP 9 — Content Load and Save
 **Status: PENDING**
@@ -188,7 +196,7 @@ Publish the approved demo after QA. Verify relative paths under the GitHub Pages
 | 5 | Authentication Foundation | COMPLETE |
 | 6 | Admin RLS + Storage Security | COMPLETE |
 | 7 | CMS Editor State | COMPLETE |
-| 8 | Undo / Redo / Cancel / Restore Default | NEXT |
+| 8 | Undo / Redo / Cancel / Restore Default | IMPLEMENTATION COMPLETE — FINAL ACCEPTANCE PENDING STEP 9 |
 | 9 | Content Load / Save | PENDING |
 | 10 | Image Upload | PENDING |
 | 11 | Public Homepage ↔ Supabase | PENDING |

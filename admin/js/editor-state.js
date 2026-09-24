@@ -38,19 +38,78 @@ export function statesEqual(a, b) {
 
 export function createEditorState(content) {
   const defaultState = freeze(prepare(defaultContent));
-  const savedState = freeze(prepare(content));
+  let savedState = freeze(prepare(content));
   let currentState = cloneState(savedState);
+  const undoStack = [];
+  const redoStack = [];
+
+  function resetHistory() {
+    undoStack.length = 0;
+    redoStack.length = 0;
+  }
+
+  function change(edit, render) {
+    const next = cloneState(currentState);
+    edit(next);
+    if (statesEqual(next, currentState)) return false;
+    // Render before committing: a failed render must leave state/history intact.
+    render?.(cloneState(next));
+    undoStack.push(cloneState(currentState));
+    currentState = next;
+    redoStack.length = 0;
+    return true;
+  }
+
+  function travel(source, destination, render) {
+    if (!source.length) return false;
+    const next = cloneState(source[source.length - 1]);
+    render?.(cloneState(next));
+    destination.push(cloneState(currentState));
+    source.pop();
+    currentState = next;
+    return true;
+  }
+
   return {
+    get canUndo() { return undoStack.length > 0; },
+    get canRedo() { return redoStack.length > 0; },
+    isDefault: () => statesEqual(currentState, defaultState),
+    undo: render => travel(undoStack, redoStack, render),
+    redo: render => travel(redoStack, undoStack, render),
+    cancel(render) {
+      const next = cloneState(savedState);
+      render?.(cloneState(next));
+      currentState = next;
+      resetHistory();
+    },
+    restoreDefaults(render) {
+      return change(next => {
+        Object.keys(next).forEach(key => delete next[key]);
+        Object.assign(next, cloneState(defaultState));
+      }, render);
+    },
+    // Step 9 must call this ONLY after persistence succeeds, with the persisted
+    // snapshot (including returned row metadata and uploaded image URLs).
+    // Failure must never call this method. Save must lock edits while pending.
+    acceptSavedState(persistedState = currentState, render) {
+      const next = cloneState(persistedState);
+      render?.(cloneState(next));
+      savedState = freeze(cloneState(next));
+      currentState = next;
+      resetHistory();
+    },
     get defaultState() { return defaultState; },
     get savedState() { return savedState; },
     // Snapshots prevent callers from mutating state outside the update methods.
     get currentState() { return cloneState(currentState); },
     isDirty: () => !statesEqual(currentState, savedState),
-    setField(field, value) { currentState[field] = value; },
-    setImage(field, file) { currentState.media[field] = { file }; },
+    setField(field, value) { return change(next => { next[field] = value; }); },
+    setImage(field, file) { return change(next => { next.media[field] = { file }; }); },
     setAnnouncement(clientId, field, value) {
-      const row = currentState.announcements.find(item => item.clientId === clientId);
-      if (row) row[field] = value;
+      return change(next => {
+        const row = next.announcements.find(item => item.clientId === clientId);
+        if (row) row[field] = value;
+      });
     },
     addAnnouncement() {
       const row = {
@@ -58,11 +117,11 @@ export function createEditorState(content) {
         announcement_date: "", announcement_title: "", announcement_description: "",
         sort_order: Math.max(0, ...currentState.announcements.map(item => item.sort_order)) + 1,
       };
-      currentState.announcements.push(row);
+      change(next => { next.announcements.push(row); });
       return row.clientId;
     },
     deleteAnnouncement(clientId) {
-      currentState.announcements = currentState.announcements.filter(item => item.clientId !== clientId);
+      change(next => { next.announcements = next.announcements.filter(item => item.clientId !== clientId); });
     },
   };
 }
