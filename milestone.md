@@ -114,14 +114,20 @@ The dashboard-configured public `cms-demo` bucket accepts PNG/JPEG/WebP files up
 **Verification reported complete:** Direct API/browser tests passed for public homepage reads, admin database writes, announcement CRUD, admin Storage upload, anonymous write/upload blocking, and public image reads while logged out. This repository task documents those results without connecting to Supabase or executing SQL.
 
 # STEP 7 — CMS Editor State
-**Status: NEXT**
+**Status: COMPLETE**
 
 Build form-to-state mapping for all homepage fields and `announcements[]`, including Add/Delete and image selection metadata. Track `defaultState`, `savedState`, and `currentState`. Keep DOM rendering separate from data access.
 
 **Acceptance:** Existing fields populate from state; edits and repeatable announcements update `currentState`; validation and status messages are clear; no edit writes to Supabase before Save.
 
+Implemented under `admin/js`: canonical defaults, isolated editor state, read-only bootstrap, DOM rendering, validation, and the homepage controller. The bootstrap reads the homepage and ordered announcements to establish `savedState`; failed loads keep editing disabled and prompt a page reload. Default and saved snapshots are deeply frozen, and edits use a separate working copy. Existing announcement IDs/timestamps remain available alongside temporary client IDs. Image selections retain immutable File objects separately from existing URL fields; the view owns/revokes preview URLs. Dirty detection compares complete state, including selected Files.
+
+**Verification:** Headless Chrome passed 21 state/rendering checks and 19 controller interaction checks using local fixtures: clone isolation, revert-to-clean, repeated Add/Delete, metadata preservation, repeated rendering, unique IDs/labels, scalar mapping, validation, file previews/rejection, disabled deferred controls, and submit prevention. Browser module parsing and `git diff --check` passed. No editor write/upload calls exist; auth modules are unchanged. Live Supabase loading and authenticated login/logout were not exercised in these fixture tests.
+
+**Deferred:** Save, uploads, Undo/Redo, Cancel, and Restore Default remain disabled/unimplemented. There is no automatic fallback masquerading as saved data. Step 8 is next; broader load/save behavior remains Step 9.
+
 # STEP 8 — Undo, Redo, Cancel, Restore Default
-**Status: PENDING**
+**Status: NEXT**
 
 Add browser-side history for unsaved editor changes. Cancel restores `savedState`; Restore Default loads `defaultState` only after confirmation and does not save. Define predictable history behavior after Save and for image previews.
 
@@ -181,8 +187,8 @@ Publish the approved demo after QA. Verify relative paths under the GitHub Pages
 | 4 | Supabase Schema + Seed | COMPLETE |
 | 5 | Authentication Foundation | COMPLETE |
 | 6 | Admin RLS + Storage Security | COMPLETE |
-| 7 | CMS Editor State | NEXT |
-| 8 | Undo / Redo / Cancel / Restore Default | PENDING |
+| 7 | CMS Editor State | COMPLETE |
+| 8 | Undo / Redo / Cancel / Restore Default | NEXT |
 | 9 | Content Load / Save | PENDING |
 | 10 | Image Upload | PENDING |
 | 11 | Public Homepage ↔ Supabase | PENDING |
