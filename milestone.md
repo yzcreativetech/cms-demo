@@ -7,9 +7,9 @@ Build a static VCA Philippines demo website and a lightweight custom CMS proof o
 
 ### Core Architecture
 
-- HTML supplies semantic structure and static fallback content; CSS supplies presentation; JavaScript handles the CMS editor. Public-page hydration remains Step 11.
+- HTML supplies semantic structure and static fallback content; CSS supplies presentation; JavaScript handles the CMS editor and read-only public-page hydration.
 - Supabase supplies Auth, database persistence, Storage, and backend authorization. Browser UI restrictions do not replace RLS or Storage policies.
-- The CMS edits one homepage configuration (`id = 1`) and a repeatable set of announcement/event rows. The public page will read saved content in Step 11 but never gain editing capability.
+- The CMS edits one homepage configuration (`id = 1`) and a repeatable set of announcement/event rows. The public page reads saved content without editing capability.
 - The browser contains the Supabase project URL and public anon key. Never put a service role key, database password, or CMS password in frontend files.
 
 ### Project Structure
@@ -27,7 +27,7 @@ supabase/reset.sql            Transactional content reset to canonical data
 supabase/security.sql         Approved admin grants, RLS, and Storage security
 ```
 
-Supabase Auth, editor state/history, and content load/save modules are implemented under `admin/js/`. Storage image uploads are implemented in Step 10 with authenticated live acceptance passed; public homepage hydration remains Step 11.
+Supabase Auth, editor state/history, and content load/save modules are implemented under `admin/js/`. Storage image uploads are implemented in Step 10 with authenticated live acceptance passed; read-only public homepage hydration is implemented under `js/`.
 
 ### Current Content Model
 
@@ -45,7 +45,7 @@ The row also has `created_at` and `updated_at`. Hex color checks and an automati
 
 The canonical seed contains one homepage row and one announcement row. Current image paths are `assets/vca_phils_logo.png`, `assets/hero-default.webp`, and `assets/movement.webp`. The public colors are primary `#233B82`, secondary `#98C2EC`, background `#FFFFFF`, and text `#1F2937`.
 
-Both font fields store `system-default`. Future JavaScript will map this value to the current public CSS stack: `system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif`. The editor also offers curated font options; no font loading is implemented yet.
+The canonical font fields store `system-default`. Public hydration maps this value to the current public CSS stack: `system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif`. Curated font tokens map to named families followed by the system stack; no external font loader is included, so unavailable families use the system fallback.
 
 ### Core CMS Behavior Rules
 
@@ -172,14 +172,21 @@ Global Save validates the complete snapshot, uploads/reuses pending images into 
 **Acceptance:** Each image can be selected and previewed; invalid files are rejected; selection alone does not upload; Save stores usable image references; failures preserve editor state and report clearly.
 
 # STEP 11 — Public Homepage Hydration
-**Status: NEXT**
+**Status: COMPLETE**
 
 Read the homepage row and ordered announcements and populate the existing `data-cms` targets. Apply colors and font values, mapping `system-default` to the current CSS stack. Use safe text assignment for editable copy. Leave authored static content intact if loading fails.
 
 **Acceptance:** Saved text, theme, images, button, and all announcement rows appear publicly; order is correct; the static page remains readable during errors; public code cannot edit content.
 
+Implemented in `js/public-data.js` and `js/homepage-hydration.js`, reusing the existing frontend client without importing admin write services. SELECT reads fetch homepage `id = 1` and announcements for `homepage_id = 1`, ordered ascending by `sort_order`, then `id`. Both reads and all display preparation/target resolution must succeed before applying content. Authored HTML stays visible during loading and unchanged on read/preparation failure; a successful empty announcement result removes the sample card.
+
+Copy uses `textContent`; HTTP(S) image references and allowlisted button protocols resolve against `document.baseURI`. Invalid image, link, color, and font values retain authored defaults. Theme colors require six-digit hex; font tokens use explicit stacks. Named fonts are not downloaded and fall back to the existing system stack when unavailable.
+
+**Verification:** Step 11 passes 49 headless Chrome fixture checks, covering static-first rendering, literal markup-like copy, all content mappings, repository-subpath URLs, theme/font allowlists, multiple/zero announcements, ordered SELECT queries, invalid values, and full fallback on homepage/announcement/client/network/malformed-response/missing-target failures. Step 8/9/10 regressions pass 29/46/36 checks. `python tests/step11-public-hydration.py --live` passes 12 checks using a fresh logged-out Chrome profile and the real Supabase client: all saved copy, three decoded Storage images, button, colors, font stacks, and ordered announcements match live reads. No uncaught browser errors, database/Storage writes, or auth actions occurred. Public source audit and `git diff --check` pass. No live data was modified.
+
+
 # STEP 12 — Security QA
-**Status: PENDING**
+**Status: NEXT**
 
 Test anonymous and admin identities directly against database and Storage policies, including announcement writes, not only against hidden UI controls. Test login, logout, direct admin route access, session expiry, and frontend secret exposure.
 
@@ -215,8 +222,8 @@ Publish the approved demo after QA. Verify relative paths under the GitHub Pages
 | 8 | Undo / Redo / Cancel / Restore Default | COMPLETE |
 | 9 | Content Load / Save | COMPLETE |
 | 10 | Image Upload | COMPLETE |
-| 11 | Public Homepage ↔ Supabase | NEXT |
-| 12 | Security QA | PENDING |
+| 11 | Public Homepage ↔ Supabase | COMPLETE |
+| 12 | Security QA | NEXT |
 | 13 | End-to-End QA | PENDING |
 | 14 | GitHub Pages Deployment | PENDING |
 

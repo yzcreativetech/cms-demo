@@ -3,6 +3,9 @@
   --vca-blue: #233b82;
   --vca-sky: #98c2ec;
   --text: #1f2937;
+  --background: #fff;
+  --body-font: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --heading-font: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --muted: #596579;
   --border: #e2e7ef;
   --surface: #f5f7fb;
@@ -19,16 +22,16 @@
 
 body {
   margin: 0;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: var(--body-font);
   color: var(--text);
-  background: #fff;
+  background: var(--background);
   line-height: 1.65;
   -webkit-font-smoothing: antialiased;
 }
 
 a { color: inherit; }
 img { max-width: 100%; }
-h1, h2 { overflow-wrap: anywhere; }
+h1, h2 { overflow-wrap: anywhere; font-family: var(--heading-font); }
 
 :focus-visible {
   outline: 3px solid var(--vca-blue);
@@ -81,7 +84,7 @@ h1, h2 { overflow-wrap: anywhere; }
 /* Header */
 .site-header {
   border-bottom: 1px solid var(--border);
-  background: #fff;
+  background: var(--background);
 }
 
 .header-inner {
@@ -206,6 +209,7 @@ h1, h2 { overflow-wrap: anywhere; }
 }
 
 .button:hover { background: var(--vca-sky); }
+.button[hidden] { display: none; }
 .hero :focus-visible { outline-color: var(--vca-sky); }
 
 /* About */
@@ -236,11 +240,12 @@ h1, h2 { overflow-wrap: anywhere; }
   border-radius: var(--radius);
 }
 
-/* One sample announcement */
+/* Announcements */
+.announcement-list { display: grid; gap: 1.5rem; }
 .announcement-card {
   max-width: 800px;
   padding: clamp(1.25rem, 3vw, 2rem);
-  background: #fff;
+  background: var(--background);
   border: 1px solid var(--border);
   border-left: 4px solid var(--vca-blue);
   border-radius: var(--radius);
