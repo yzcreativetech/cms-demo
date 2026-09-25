@@ -77,8 +77,9 @@ try {
   click('undo');check('Failed Save did not advance baseline',el('hero-title').value==='Saved C'&&el('cancel-button').disabled);click('redo');await save();
   check('Failed Save is retryable',db.home.hero_title==='Retry me'&&el('undo-button').disabled);
   const transfer=new DataTransfer();transfer.items.add(new File(['image'],'local.png',{type:'image/png'}));el('hero-image-input').files=transfer.files;el('hero-image-input').dispatchEvent(new Event('change',{bubbles:true}));
-  const preview=el('hero-image-preview').src;count=writes().length;await save();
-  check('Pending upload blocks writes without losing preview',writes().length===count&&el('hero-image-preview').src===preview&&!el('undo-button').disabled);click('undo');
+  const preview=el('hero-image-preview').src;count=writes().length;
+  db.uploadFail={after:1};await save();
+  check('Failed pending upload blocks writes without losing preview',writes().length===count&&el('hero-image-preview').src===preview&&!el('undo-button').disabled);click('undo');
   // Exercise real persistence service with isolated state and controlled failures.
   const state=createEditorState(await loadEditorContent());const service=createEditorPersistence();
   const first=state.addAnnouncement();state.setAnnouncement(first,'announcement_title','First insert');

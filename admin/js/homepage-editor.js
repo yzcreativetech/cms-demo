@@ -1,5 +1,6 @@
 import { loadEditorContent, createEditorPersistence, EditorSaveError } from "./editor-data.js";
 import { createEditorState } from "./editor-state.js";
+import { createMediaPersistence, EditorMediaError } from "./editor-media.js";
 import { createEditorView, fieldMap, imageMap } from "./editor-view.js";
 import { validateEditorState, validateImage, validateForSave } from "./editor-validation.js";
 
@@ -8,6 +9,7 @@ const view = createEditorView(form);
 let editor;
 const selectionErrors = new Map();
 const persistence = createEditorPersistence();
+const mediaPersistence = createMediaPersistence();
 let isSaving = false;
 const historyControls = ["undo-button", "redo-button", "cancel-button", "restore-default-button"];
 [...historyControls, "save-button"].forEach(id => { document.getElementById(id).disabled = true; });
@@ -104,15 +106,19 @@ form.addEventListener("submit", async event => {
   updateControls();
   view.showStatus("Saving changes...", "loading");
   try {
-    const persisted = await persistence.save(snapshot, editor.savedState);
+    const preparedSnapshot = await mediaPersistence.prepareForSave(snapshot);
+    const persisted = await persistence.save(preparedSnapshot, editor.savedState);
     editor.acceptSavedState(persisted, view.render);
     persistence.acknowledge();
+    mediaPersistence.acknowledge();
     view.lockAnnouncements();
     view.showStatus("Changes saved successfully.", "ready");
   } catch (error) {
     // Service errors are sanitized; never display backend objects/tokens.
-    view.showStatus(error instanceof EditorSaveError ? error.message
-      : "Unable to finish Save. Some changes may already be stored. Your edits are retained; retry Save.", "error");
+    const message = error instanceof EditorSaveError || error instanceof EditorMediaError ? error.message
+      : "Unable to finish Save. Some changes may already be stored. Your edits are retained; retry Save.";
+    view.showStatus(message + (mediaPersistence.hasPendingUploads
+      ? " Uploaded images may already exist even though Save did not finish. Cancel cannot remove those uploads." : ""), "error");
   } finally {
     isSaving = false;
     updateControls();

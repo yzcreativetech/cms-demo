@@ -3,7 +3,7 @@ const copy = value => structuredClone(value);
 const fixture = window.top.fixture ||= {
   home: {...copy(defaultContent), announcements: undefined, hero_title:'Saved title'},
   rows: [{...copy(defaultContent.announcements[0]), id:10}],
-  next:11, calls:[], fail:null, user:true,
+  next:11, calls:[], fail:null, user:true, uploads:[], objects:{}, uploadFail:null, badUrl:false,
 };
 export {fixture};
 class Query {
@@ -40,5 +40,17 @@ class Query {
   }
 }
 export async function getSupabaseClient() {
-  return {from:table=>new Query(table), auth:{getUser:async()=>({data:{user:fixture.user?{id:'fixture-admin'}:null},error:null})}};
+  return {from:table=>new Query(table), auth:{getUser:async()=>({data:{user:fixture.user?{id:'fixture-admin'}:null},error:null})},
+    storage:{from:bucket=>({
+      async upload(path,file,options) {
+        fixture.uploads.push({bucket,path,file,options});
+        await new Promise(resolve=>setTimeout(resolve,10));
+        if(!fixture.user || (fixture.uploadFail && --fixture.uploadFail.after===0)) {
+          fixture.uploadFail=null;return {error:{message:'private backend error'}};
+        }
+        if(fixture.objects[path]) return {error:{message:'Duplicate object'}};
+        fixture.objects[path]=file;return {data:{path},error:null};
+      },
+      getPublicUrl(path) { return {data:{publicUrl:fixture.badUrl?'blob:invalid':`${location.origin}/storage/v1/object/public/${bucket}/${path}`}}; },
+    })}};
 }

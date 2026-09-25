@@ -18,7 +18,9 @@ export function validateEditorState(state) {
     }
   }
   if (!Array.isArray(state.announcements) || state.announcements.some(row => !row || typeof row !== "object") ||
-      !state.media || ["site_logo_url", "hero_image_url", "about_image_url"].some(field => !state.media[field])) {
+      !state.media || ["site_logo_url", "hero_image_url", "about_image_url"].some(field =>
+        !state.media[field] || typeof state.media[field] !== "object" ||
+        (state.media[field].file !== null && !(state.media[field].file instanceof File)))) {
     errors.push({ message: "Invalid editor data. Reload saved content." });
   }
   if (errors.length) return errors;
@@ -53,7 +55,8 @@ export function validateEditorState(state) {
       errors.push({ clientId: row.clientId, message: "Invalid announcement order." });
     }
   });
-  for (const [field, selection] of Object.entries(state.media)) {
+  for (const field of ["site_logo_url", "hero_image_url", "about_image_url"]) {
+    const selection = state.media[field];
     const message = validateImage(selection.file);
     if (message) errors.push({ field, message });
   }
@@ -69,8 +72,6 @@ export function validateForSave(state) {
       const url = new URL(state[field], "https://example.invalid/");
       if (!["https:", "http:"].includes(url.protocol)) throw new Error();
     } catch { errors.push({ field, message: "Use a valid HTTP(S) image URL or site path." }); }
-    if (state.media?.[field]?.file) errors.push({ field,
-      message: "Image uploads are not available yet. Undo the image selection before saving; your preview and edits are preserved." });
   }
   const ids = new Set();
   const clients = new Set();

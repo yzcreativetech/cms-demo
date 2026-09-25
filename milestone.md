@@ -7,10 +7,10 @@ Build a static VCA Philippines demo website and a lightweight custom CMS proof o
 
 ### Core Architecture
 
-- HTML supplies semantic structure and static fallback content; CSS supplies presentation; future JavaScript handles editor and public-page behavior.
+- HTML supplies semantic structure and static fallback content; CSS supplies presentation; JavaScript handles the CMS editor. Public-page hydration remains Step 11.
 - Supabase supplies Auth, database persistence, Storage, and backend authorization. Browser UI restrictions do not replace RLS or Storage policies.
-- The CMS edits one homepage configuration (`id = 1`) and a repeatable set of announcement/event rows. The public page reads saved content but never gains editing capability.
-- The browser may later contain the Supabase project URL and publishable/anon key. Never put a service role key, database password, or CMS password in frontend files.
+- The CMS edits one homepage configuration (`id = 1`) and a repeatable set of announcement/event rows. The public page will read saved content in Step 11 but never gain editing capability.
+- The browser contains the Supabase project URL and public anon key. Never put a service role key, database password, or CMS password in frontend files.
 
 ### Project Structure
 
@@ -27,7 +27,7 @@ supabase/reset.sql            Transactional content reset to canonical data
 supabase/security.sql         Approved admin grants, RLS, and Storage security
 ```
 
-Future JavaScript services and page modules will be added as their steps are implemented. Supabase Auth, Storage, and browser integration are not present in these local files yet.
+Supabase Auth, editor state/history, and content load/save modules are implemented under `admin/js/`. Storage image uploads are implemented in Step 10 with authenticated live acceptance passed; public homepage hydration remains Step 11.
 
 ### Current Content Model
 
@@ -41,7 +41,7 @@ Future JavaScript services and page modules will be added as their steps are imp
 
 The row also has `created_at` and `updated_at`. Hex color checks and an automatic `updated_at` trigger are defined in `schema.sql`.
 
-`public.homepage_announcements` holds repeatable rows with `id`, `homepage_id`, `announcement_date`, `announcement_title`, `announcement_description`, `sort_order`, `created_at`, and `updated_at`. `homepage_id` references `homepage_content.id` with cascading deletion. Future editor state should use an `announcements[]` collection. The existing Add Announcement / Event and Delete controls will map to these rows.
+`public.homepage_announcements` holds repeatable rows with `id`, `homepage_id`, `announcement_date`, `announcement_title`, `announcement_description`, `sort_order`, `created_at`, and `updated_at`. `homepage_id` references `homepage_content.id` with cascading deletion. Editor state uses an `announcements[]` collection. Global Save maps announcement Add/Edit/Delete changes to these rows.
 
 The canonical seed contains one homepage row and one announcement row. Current image paths are `assets/vca_phils_logo.png`, `assets/hero-default.webp`, and `assets/movement.webp`. The public colors are primary `#233B82`, secondary `#98C2EC`, background `#FFFFFF`, and text `#1F2937`.
 
@@ -49,13 +49,13 @@ Both font fields store `system-default`. Future JavaScript will map this value t
 
 ### Core CMS Behavior Rules
 
-Future editor state distinguishes `defaultState` (canonical seed), `savedState` (last persisted data), and `currentState` (visible edits), including `announcements[]`.
+Editor state distinguishes `defaultState` (canonical seed), `savedState` (last persisted data), and `currentState` (visible edits), including `announcements[]`.
 
 - Restore Default loads `defaultState` into the editor without saving.
 - Cancel returns the editor to `savedState`.
 - Undo and Redo change browser-side state only. They never write to Supabase.
 - Save Changes is the normal operation that persists edits and updates `savedState` after success.
-- Image selection creates a local preview; upload occurs on Save. The original static image paths remain valid fallback references.
+- Image selection creates a local preview; only global Save uploads selected Files. Failed Saves preserve previews, Files, and history. The original static image paths remain valid fallback references.
 
 ---
 
@@ -67,7 +67,7 @@ The public demo homepage contains the logo, hero, Our Movement, one announcement
 # STEP 2 — CMS HTML Shell
 **Status: COMPLETE**
 
-`admin/login.html` and `admin/index.html` provide the login screen, navigation, editor, image previews and inputs, status regions, Undo, Redo, Cancel, Restore Default, Save Changes, View Website, Logout, and announcement Add/Delete controls. The Brand Theme section has four paired color picker/hex controls and two font dropdowns. These controls remain presentation-only pending JavaScript integration.
+`admin/login.html` and `admin/index.html` provide the login screen, navigation, editor, image previews and inputs, status regions, Undo, Redo, Cancel, Restore Default, Save Changes, View Website, Logout, and announcement Add/Delete controls. The Brand Theme section has four paired color picker/hex controls and two font dropdowns. These controls are now wired to the editor, including image upload on Save in Step 10.
 
 # STEP 3 — CMS Styling and Brand Theme UI
 **Status: COMPLETE**
@@ -122,9 +122,9 @@ Build form-to-state mapping for all homepage fields and `announcements[]`, inclu
 
 Implemented under `admin/js`: canonical defaults, isolated editor state, read-only bootstrap, DOM rendering, validation, and the homepage controller. The bootstrap reads the homepage and ordered announcements to establish `savedState`; failed loads keep editing disabled and prompt a page reload. Default and saved snapshots are deeply frozen, and edits use a separate working copy. Existing announcement IDs/timestamps remain available alongside temporary client IDs. Image selections retain immutable File objects separately from existing URL fields; the view owns/revokes preview URLs. Dirty detection compares complete state, including selected Files.
 
-**Verification:** Headless Chrome passed 21 state/rendering checks and 19 controller interaction checks using local fixtures: clone isolation, revert-to-clean, repeated Add/Delete, metadata preservation, repeated rendering, unique IDs/labels, scalar mapping, validation, file previews/rejection, disabled deferred controls, and submit prevention. Browser module parsing and `git diff --check` passed. No editor write/upload calls exist; auth modules are unchanged. Live Supabase loading and authenticated login/logout were not exercised in these fixture tests.
+**Verification:** Headless Chrome passed 21 state/rendering checks and 19 controller interaction checks using local fixtures: clone isolation, revert-to-clean, repeated Add/Delete, metadata preservation, repeated rendering, unique IDs/labels, scalar mapping, validation, file previews/rejection, disabled deferred controls, and submit prevention. Browser module parsing and `git diff --check` passed. At Step 7, no editor write/upload calls existed; content persistence was added in Step 9. Auth modules were unchanged. Live Supabase loading and authenticated login/logout were not exercised in these fixture tests.
 
-**Follow-up:** Steps 8 and 9 now implement history controls and content Save. Image upload remains Step 10. There is no automatic fallback masquerading as saved data.
+**Follow-up:** Steps 8 and 9 now implement history controls and content Save. Step 10 now implements image upload on Save, with live acceptance passed. There is no automatic fallback masquerading as saved data.
 
 # STEP 8 — Undo, Redo, Cancel, Restore Default
 **Status: COMPLETE**
@@ -154,17 +154,25 @@ Load `homepage_content` row `id = 1` and ordered `homepage_announcements` into e
 
 **Announcement safeguards:** Loaded/default cards start read-only. Edit unlocks only its card; Done Editing locks it without discarding unsaved content. New cards start editable. Edit mode is view-only, creates no history, and survives Undo/Redo; successful Save and CMS Cancel lock cards again. Delete confirmation precedes any state/history change for both persisted and new cards. Confirmed deletion remains undoable and only global Save persists it. Existing global Save architecture is unchanged.
 
-**Limitations:** No atomic Save RPC exists. Multi-request Save can partially persist; errors preserve the editor and report that risk. A session-only operation journal prevents duplicate acknowledged inserts and reconciles a lost insert response against newly visible matching rows. If that result is missing or ambiguous, further writes pause rather than blindly insert again; external verification is needed if retries cannot resolve it. This is a single-editor demo, without concurrent-edit conflict resolution. Cancel affects browser state only and cannot undo partial database writes. The journal is not persisted across reloads. Image uploads remain Step 10: Save rejects pending local Files while retaining previews/history; existing image paths/URLs can be saved.
+**Limitations:** No atomic Save RPC exists. Multi-request Save can partially persist; errors preserve the editor and report that risk. A session-only operation journal prevents duplicate acknowledged inserts and reconciles a lost insert response against newly visible matching rows. If that result is missing or ambiguous, further writes pause rather than blindly insert again; external verification is needed if retries cannot resolve it. This is a single-editor demo, without concurrent-edit conflict resolution. Cancel affects browser state only and cannot undo partial database writes. The journal is not persisted across reloads. Step 10 supersedes the temporary pending-File Save restriction: images upload before this database persistence service runs.
 
 # STEP 10 — Image Upload
-**Status: PENDING**
+**Status: COMPLETE**
 
-Support logo, hero, and Our Movement replacement through Storage. Validate type and size, preview selected files locally, and upload on Save before storing their references. Handle failed uploads and database failures without claiming success; document any orphaned upload limitation.
+Implemented in `admin/js/editor-media.js` using the existing authenticated Supabase client and public `cms-demo` bucket. The centralized mapping is `site_logo_url → logos/`, `hero_image_url → hero/`, and `about_image_url → movement/`. UUID filenames use validated MIME-derived extensions; uploads use `upsert: false`. Existing PNG/JPEG/WebP, non-empty, maximum 5 MB validation runs before requests. Public references come from Storage's `getPublicUrl` API.
+
+Global Save validates the complete snapshot, uploads/reuses pending images into a separate persistence snapshot, runs the existing Step 9 database service, and only then accepts the saved state and acknowledges both journals. Success clears pending Files/history and switches previews to persisted URLs. Failure retains live Files, previews, history, and retry controls. Selection, history controls, and announcement editing do not upload.
+
+**Verification:** Local headless Chrome fixtures pass Step 8 (29 checks), Step 9 (46 checks), and Step 10 (36 checks). Step 9's temporary upload-block assertion now verifies an actual upload failure blocks database writes. Step 10 covers selection/validation, folders/extensions/unique paths, single/all-image Save, duplicate submission, snapshot isolation, upload/partial-upload/database failures, retry reuse, new-File replacement, URL validation, reload, and singleton protection. No uncaught browser errors or non-GET HTTP requests occurred; Storage and database writes were mocked. `git diff --check` passes.
+
+**Live acceptance: PASS.** User-confirmed authenticated image upload, Save, reload, and public image retrieval passed for Logo, Hero, and Our Movement. Final live read-only verification returned exactly one `homepage_content` row with IDs `[1]`. All three image fields contain persisted HTTPS public Storage references, not blob URLs, local/file paths, or temporary previews. No database changes were made during the final verification.
+
+**Orphaned-upload limitation:** Storage permits INSERT only; no UPDATE/DELETE or automatic cleanup is added. Uploaded objects can remain unreferenced after permanent database failure, reload/close before completion, replacement of a previously uploaded File, or Cancel after partial Save. Cancel cannot roll back uploads or partial database writes. A browser-memory journal keyed by File identity and field reuses confirmed uploads across retries and Undo/Redo; it clears only after full Save success and does not survive reload. A lost upload response can also leave an unconfirmed orphan; retry uses a new unique path. Superseded saved images are retained.
 
 **Acceptance:** Each image can be selected and previewed; invalid files are rejected; selection alone does not upload; Save stores usable image references; failures preserve editor state and report clearly.
 
 # STEP 11 — Public Homepage Hydration
-**Status: PENDING**
+**Status: NEXT**
 
 Read the homepage row and ordered announcements and populate the existing `data-cms` targets. Apply colors and font values, mapping `system-default` to the current CSS stack. Use safe text assignment for editable copy. Leave authored static content intact if loading fails.
 
@@ -206,8 +214,8 @@ Publish the approved demo after QA. Verify relative paths under the GitHub Pages
 | 7 | CMS Editor State | COMPLETE |
 | 8 | Undo / Redo / Cancel / Restore Default | COMPLETE |
 | 9 | Content Load / Save | COMPLETE |
-| 10 | Image Upload | PENDING |
-| 11 | Public Homepage ↔ Supabase | PENDING |
+| 10 | Image Upload | COMPLETE |
+| 11 | Public Homepage ↔ Supabase | NEXT |
 | 12 | Security QA | PENDING |
 | 13 | End-to-End QA | PENDING |
 | 14 | GitHub Pages Deployment | PENDING |
