@@ -1,0 +1,962 @@
+{
+  "date": "2026-10-01T01:53:31.734Z",
+  "runId": 1790819611734,
+  "mode": "full",
+  "phase": "finished",
+  "checks": [
+    {
+      "area": "CLEANUP",
+      "test": "Baseline singleton and no preexisting E2E QA rows",
+      "result": "PASS",
+      "detail": {}
+    },
+    {
+      "area": "PUBLIC",
+      "test": "Authored static fallback retained",
+      "result": "PASS",
+      "detail": {}
+    },
+    {
+      "area": "PUBLIC",
+      "test": "Initial homepage: hydration",
+      "result": "PASS",
+      "detail": {}
+    },
+    {
+      "area": "PUBLIC",
+      "test": "Initial homepage: content mapping",
+      "result": "PASS",
+      "detail": {}
+    },
+    {
+      "area": "PUBLIC",
+      "test": "Initial homepage: all three images render",
+      "result": "PASS",
+      "detail": {}
+    },
+    {
+      "area": "PUBLIC",
+      "test": "Initial homepage: theme and button",
+      "result": "PASS",
+      "detail": {}
+    },
+    {
+      "area": "PUBLIC",
+      "test": "Initial homepage: read-only page",
+      "result": "PASS",
+      "detail": {}
+    },
+    {
+      "area": "RESPONSIVE",
+      "test": "public 1440px",
+      "result": "PASS",
+      "detail": {
+        "viewport": 1440,
+        "contentWidth": 1425,
+        "noOverflow": true,
+        "usableControls": true,
+        "imageFit": true,
+        "noOverlap": true,
+        "statusVisible": true,
+        "navigation": true
+      }
+    },
+    {
+      "area": "RESPONSIVE",
+      "test": "public 1200px",
+      "result": "PASS",
+      "detail": {
+        "viewport": 1200,
+        "contentWidth": 1185,
+        "noOverflow": true,
+        "usableControls": true,
+        "imageFit": true,
+        "noOverlap": true,
+        "statusVisible": true,
+        "navigation": true
+      }
+    },
+    {
+      "area": "RESPONSIVE",
+      "test": "public 1024px",
+      "result": "PASS",
+      "detail": {
+        "viewport": 1024,
+        "contentWidth": 1009,
+        "noOverflow": true,
+        "usableControls": true,
+        "imageFit": true,
+        "noOverlap": true,
+        "statusVisible": true,
+        "navigation": true
+      }
+    },
+    {
+      "area": "RESPONSIVE",
+      "test": "public 800px",
+      "result": "PASS",
+      "detail": {
+        "viewport": 800,
+        "contentWidth": 785,
+        "noOverflow": true,
+        "usableControls": true,
+        "imageFit": true,
+        "noOverlap": true,
+        "statusVisible": true,
+        "navigation": true
+      }
+    },
+    {
+      "area": "RESPONSIVE",
+      "test": "public 650px",
+      "result": "PASS",
+      "detail": {
+        "viewport": 650,
+        "contentWidth": 635,
+        "noOverflow": true,
+        "usableControls": true,
+        "imageFit": true,
+        "noOverlap": true,
+        "statusVisible": true,
+        "navigation": true
+      }
+    },
+    {
+      "area": "RESPONSIVE",
+      "test": "public 390px",
+      "result": "PASS",
+      "detail": {
+        "viewport": 390,
+        "contentWidth": 375,
+        "noOverflow": true,
+        "usableControls": true,
+        "imageFit": true,
+        "noOverlap": true,
+        "statusVisible": true,
+        "navigation": true
+      }
+    },
+    {
+      "area": "PUBLIC",
+      "test": "Repository subpath: hydration",
+      "result": "PASS",
+      "detail": {}
+    },
+    {
+      "area": "PUBLIC",
+      "test": "Repository subpath: content mapping",
+      "result": "PASS",
+      "detail": {}
+    },
+    {
+      "area": "PUBLIC",
+      "test": "Repository subpath: all three images render",
+      "result": "PASS",
+      "detail": {}
+    },
+    {
+      "area": "PUBLIC",
+      "test": "Repository subpath: theme and button",
+      "result": "PASS",
+      "detail": {}
+    },
+    {
+      "area": "PUBLIC",
+      "test": "Repository subpath: read-only page",
+      "result": "PASS",
+      "detail": {}
+    },
+    {
+      "area": "PUBLIC",
+      "test": "Network failure keeps authored fallback",
+      "result": "PASS",
+      "detail": {}
+    },
+    {
+      "area": "AUTH",
+      "test": "Invalid login rejected with safe error",
+      "result": "PASS",
+      "detail": {}
+    },
+    {
+      "area": "RESPONSIVE",
+      "test": "login 1440px",
+      "result": "PASS",
+      "detail": {
+        "viewport": 1440,
+        "contentWidth": 1440,
+        "noOverflow": true,
+        "usableControls": true,
+        "imageFit": true,
+        "noOverlap": true,
+        "statusVisible": true,
+        "navigation": true
+      }
+    },
+    {
+      "area": "RESPONSIVE",
+      "test": "login 1200px",
+      "result": "PASS",
+      "detail": {
+        "viewport": 1200,
+        "contentWidth": 1200,
+        "noOverflow": true,
+        "usableControls": true,
+        "imageFit": true,
+        "noOverlap": true,
+        "statusVisible": true,
+        "navigation": true
+      }
+    },
+    {
+      "area": "RESPONSIVE",
+      "test": "login 1024px",
+      "result": "PASS",
+      "detail": {
+        "viewport": 1024,
+        "contentWidth": 1024,
+        "noOverflow": true,
+        "usableControls": true,
+        "imageFit": true,
+        "noOverlap": true,
+        "statusVisible": true,
+        "navigation": true
+      }
+    },
+    {
+      "area": "RESPONSIVE",
+      "test": "login 800px",
+      "result": "PASS",
+      "detail": {
+        "viewport": 800,
+        "contentWidth": 800,
+        "noOverflow": true,
+        "usableControls": true,
+        "imageFit": true,
+        "noOverlap": true,
+        "statusVisible": true,
+        "navigation": true
+      }
+    },
+    {
+      "area": "RESPONSIVE",
+      "test": "login 650px",
+      "result": "PASS",
+      "detail": {
+        "viewport": 650,
+        "contentWidth": 650,
+        "noOverflow": true,
+        "usableControls": true,
+        "imageFit": true,
+        "noOverlap": true,
+        "statusVisible": true,
+        "navigation": true
+      }
+    },
+    {
+      "area": "RESPONSIVE",
+      "test": "login 390px",
+      "result": "PASS",
+      "detail": {
+        "viewport": 390,
+        "contentWidth": 390,
+        "noOverflow": true,
+        "usableControls": true,
+        "imageFit": true,
+        "noOverlap": true,
+        "statusVisible": true,
+        "navigation": true
+      }
+    },
+    {
+      "area": "AUTH",
+      "test": "Valid manual login and session recognized",
+      "result": "PASS",
+      "detail": {}
+    },
+    {
+      "area": "EDITOR",
+      "test": "Initial fields, announcement records and previews match snapshot",
+      "result": "PASS",
+      "detail": {}
+    },
+    {
+      "area": "EDITOR",
+      "test": "Initial saved state has no false dirty indication",
+      "result": "PASS",
+      "detail": {}
+    },
+    {
+      "area": "RESPONSIVE",
+      "test": "editor 1440px",
+      "result": "PASS",
+      "detail": {
+        "viewport": 1440,
+        "contentWidth": 1425,
+        "noOverflow": true,
+        "usableControls": true,
+        "imageFit": true,
+        "noOverlap": true,
+        "statusVisible": true,
+        "navigation": true
+      }
+    },
+    {
+      "area": "RESPONSIVE",
+      "test": "editor 1200px",
+      "result": "PASS",
+      "detail": {
+        "viewport": 1200,
+        "contentWidth": 1185,
+        "noOverflow": true,
+        "usableControls": true,
+        "imageFit": true,
+        "noOverlap": true,
+        "statusVisible": true,
+        "navigation": true
+      }
+    },
+    {
+      "area": "RESPONSIVE",
+      "test": "editor 1024px",
+      "result": "PASS",
+      "detail": {
+        "viewport": 1024,
+        "contentWidth": 1009,
+        "noOverflow": true,
+        "usableControls": true,
+        "imageFit": true,
+        "noOverlap": true,
+        "statusVisible": true,
+        "navigation": true
+      }
+    },
+    {
+      "area": "RESPONSIVE",
+      "test": "editor 800px",
+      "result": "PASS",
+      "detail": {
+        "viewport": 800,
+        "contentWidth": 785,
+        "noOverflow": true,
+        "usableControls": true,
+        "imageFit": true,
+        "noOverlap": true,
+        "statusVisible": true,
+        "navigation": true
+      }
+    },
+    {
+      "area": "RESPONSIVE",
+      "test": "editor 650px",
+      "result": "PASS",
+      "detail": {
+        "viewport": 650,
+        "contentWidth": 635,
+        "noOverflow": true,
+        "usableControls": true,
+        "imageFit": true,
+        "noOverlap": true,
+        "statusVisible": true,
+        "navigation": true
+      }
+    },
+    {
+      "area": "RESPONSIVE",
+      "test": "editor 390px",
+      "result": "PASS",
+      "detail": {
+        "viewport": 390,
+        "contentWidth": 375,
+        "noOverflow": true,
+        "usableControls": true,
+        "imageFit": true,
+        "noOverlap": true,
+        "statusVisible": true,
+        "navigation": true
+      }
+    },
+    {
+      "area": "EDITOR",
+      "test": "Hero edit updates form and dirty state",
+      "result": "PASS",
+      "detail": {}
+    },
+    {
+      "area": "EDITOR",
+      "test": "Undo restores saved hero title",
+      "result": "PASS",
+      "detail": {}
+    },
+    {
+      "area": "EDITOR",
+      "test": "Redo restores QA title",
+      "result": "PASS",
+      "detail": {}
+    },
+    {
+      "area": "EDITOR",
+      "test": "Edit Undo Redo never write database",
+      "result": "PASS",
+      "detail": {
+        "writes": 0
+      }
+    },
+    {
+      "area": "EDITOR",
+      "test": "Cancel confirms and restores complete saved state",
+      "result": "PASS",
+      "detail": {}
+    },
+    {
+      "area": "EDITOR",
+      "test": "Cancel never writes database",
+      "result": "PASS",
+      "detail": {
+        "writes": 0
+      }
+    },
+    {
+      "area": "EDITOR",
+      "test": "Restore Default requires confirmation",
+      "result": "PASS",
+      "detail": {}
+    },
+    {
+      "area": "EDITOR",
+      "test": "Restore Default loads defaults and becomes dirty",
+      "result": "PASS",
+      "detail": {}
+    },
+    {
+      "area": "EDITOR",
+      "test": "Restore Default is unsaved until Save",
+      "result": "PASS",
+      "detail": {
+        "writes": 0
+      }
+    },
+    {
+      "area": "EDITOR",
+      "test": "Cancel defaults returns to exact pre-QA values",
+      "result": "PASS",
+      "detail": {}
+    },
+    {
+      "area": "ANNOUNCEMENTS",
+      "test": "Add and edit temporary announcement",
+      "result": "PASS",
+      "detail": {}
+    },
+    {
+      "area": "ANNOUNCEMENTS",
+      "test": "Done Editing locks temporary fields",
+      "result": "PASS",
+      "detail": {}
+    },
+    {
+      "area": "ANNOUNCEMENTS",
+      "test": "Edit reopens only temporary card",
+      "result": "PASS",
+      "detail": {}
+    },
+    {
+      "area": "ANNOUNCEMENTS",
+      "test": "Rejected Delete confirmation preserves temporary card",
+      "result": "PASS",
+      "detail": {}
+    },
+    {
+      "area": "ANNOUNCEMENTS",
+      "test": "Confirmed Delete removes temporary card locally",
+      "result": "PASS",
+      "detail": {}
+    },
+    {
+      "area": "EDITOR",
+      "test": "Announcement editing leaves real rows unchanged",
+      "result": "PASS",
+      "detail": {
+        "writes": 0
+      }
+    },
+    {
+      "area": "IMAGES",
+      "test": "Hero selection produces valid local preview and dirty state",
+      "result": "PASS",
+      "detail": {}
+    },
+    {
+      "area": "EDITOR",
+      "test": "Image selection does not upload or save",
+      "result": "PASS",
+      "detail": {
+        "writes": 0
+      }
+    },
+    {
+      "area": "IMAGES",
+      "test": "Logo and movement controls remain available",
+      "result": "PASS",
+      "detail": {}
+    },
+    {
+      "area": "IMAGES",
+      "test": "Undo restores saved image reference and clean state",
+      "result": "PASS",
+      "detail": {}
+    },
+    {
+      "area": "CLEANUP",
+      "test": "Pre-write snapshot still current",
+      "result": "PASS",
+      "detail": {}
+    },
+    {
+      "area": "PERSISTENCE",
+      "test": "Controlled full Save: loading and controls lock",
+      "result": "PASS",
+      "detail": {}
+    },
+    {
+      "area": "PERSISTENCE",
+      "test": "Controlled full Save: success and normalized history",
+      "result": "PASS",
+      "detail": {}
+    },
+    {
+      "area": "PERSISTENCE",
+      "test": "Controlled full Save: duplicate submit prevented",
+      "result": "PASS",
+      "detail": {
+        "homepageUpdates": 1
+      }
+    },
+    {
+      "area": "PERSISTENCE",
+      "test": "Database holds QA title and exactly one QA announcement",
+      "result": "PASS",
+      "detail": {}
+    },
+    {
+      "area": "PERSISTENCE",
+      "test": "Real announcement content unchanged by Save",
+      "result": "PASS",
+      "detail": {}
+    },
+    {
+      "area": "IMAGES",
+      "test": "Hero image uploaded once and persisted as public reference",
+      "result": "PASS",
+      "detail": {
+        "path": "cms-demo/hero/1c11f493-4116-4d7d-90c9-94dbc3340eb8.png"
+      }
+    },
+    {
+      "area": "PUBLIC",
+      "test": "Saved QA changes: hydration",
+      "result": "PASS",
+      "detail": {}
+    },
+    {
+      "area": "PUBLIC",
+      "test": "Saved QA changes: content mapping",
+      "result": "PASS",
+      "detail": {}
+    },
+    {
+      "area": "PUBLIC",
+      "test": "Saved QA changes: all three images render",
+      "result": "PASS",
+      "detail": {}
+    },
+    {
+      "area": "PUBLIC",
+      "test": "Saved QA changes: theme and button",
+      "result": "PASS",
+      "detail": {}
+    },
+    {
+      "area": "PUBLIC",
+      "test": "Saved QA changes: read-only page",
+      "result": "PASS",
+      "detail": {}
+    },
+    {
+      "area": "AUTH",
+      "test": "Authenticated reload recognizes session",
+      "result": "PASS",
+      "detail": {}
+    },
+    {
+      "area": "PERSISTENCE",
+      "test": "Reload loads persisted fields and image into clean editor",
+      "result": "PASS",
+      "detail": {}
+    },
+    {
+      "area": "PERSISTENCE",
+      "test": "Restore title and delete QA announcement: loading and controls lock",
+      "result": "PASS",
+      "detail": {}
+    },
+    {
+      "area": "PERSISTENCE",
+      "test": "Restore title and delete QA announcement: success and normalized history",
+      "result": "PASS",
+      "detail": {}
+    },
+    {
+      "area": "PERSISTENCE",
+      "test": "Restore title and delete QA announcement: duplicate submit prevented",
+      "result": "PASS",
+      "detail": {
+        "homepageUpdates": 1
+      }
+    },
+    {
+      "area": "ANNOUNCEMENTS",
+      "test": "Saved Delete removes temporary row",
+      "result": "PASS",
+      "detail": {}
+    },
+    {
+      "area": "CLEANUP",
+      "test": "Exact original homepage content and image references restored",
+      "result": "PASS",
+      "detail": {}
+    },
+    {
+      "area": "CLEANUP",
+      "test": "Original announcements and IDs restored; QA rows removed",
+      "result": "PASS",
+      "detail": {}
+    },
+    {
+      "area": "PUBLIC",
+      "test": "Restored public homepage: hydration",
+      "result": "PASS",
+      "detail": {}
+    },
+    {
+      "area": "PUBLIC",
+      "test": "Restored public homepage: content mapping",
+      "result": "PASS",
+      "detail": {}
+    },
+    {
+      "area": "PUBLIC",
+      "test": "Restored public homepage: all three images render",
+      "result": "PASS",
+      "detail": {}
+    },
+    {
+      "area": "PUBLIC",
+      "test": "Restored public homepage: theme and button",
+      "result": "PASS",
+      "detail": {}
+    },
+    {
+      "area": "PUBLIC",
+      "test": "Restored public homepage: read-only page",
+      "result": "PASS",
+      "detail": {}
+    },
+    {
+      "area": "CLEANUP",
+      "test": "Restored editor loads original values cleanly",
+      "result": "PASS",
+      "detail": {}
+    },
+    {
+      "area": "AUTH",
+      "test": "Logout clears session and redirects",
+      "result": "PASS",
+      "detail": {}
+    },
+    {
+      "area": "AUTH",
+      "test": "Logged-out direct admin route redirects",
+      "result": "PASS",
+      "detail": {}
+    },
+    {
+      "area": "CLEANUP",
+      "test": "Temporary Storage artifacts removed",
+      "result": "PASS",
+      "detail": {
+        "verification": "Cache-busted public GET; Storage 404 / NoSuchKey required",
+        "objects": 1
+      }
+    },
+    {
+      "area": "PUBLISHED",
+      "test": "Published live hydration",
+      "result": "PASS",
+      "detail": {
+        "url": "https://yzcreativetech.github.io/cms-demo/"
+      }
+    },
+    {
+      "area": "PUBLISHED",
+      "test": "Published content mapping",
+      "result": "PASS",
+      "detail": {
+        "url": "https://yzcreativetech.github.io/cms-demo/"
+      }
+    },
+    {
+      "area": "PUBLISHED",
+      "test": "Published images render",
+      "result": "PASS",
+      "detail": {
+        "url": "https://yzcreativetech.github.io/cms-demo/"
+      }
+    },
+    {
+      "area": "PUBLISHED",
+      "test": "Published announcements match",
+      "result": "PASS",
+      "detail": {
+        "url": "https://yzcreativetech.github.io/cms-demo/"
+      }
+    },
+    {
+      "area": "PUBLISHED",
+      "test": "Published page has no editing controls",
+      "result": "PASS",
+      "detail": {
+        "url": "https://yzcreativetech.github.io/cms-demo/"
+      }
+    },
+    {
+      "area": "PUBLISHED",
+      "test": "Published demo labeling",
+      "result": "PASS",
+      "detail": {
+        "url": "https://yzcreativetech.github.io/cms-demo/"
+      }
+    },
+    {
+      "area": "PUBLISHED",
+      "test": "Published fresh browser is logged out",
+      "result": "PASS",
+      "detail": {
+        "url": "https://yzcreativetech.github.io/cms-demo/"
+      }
+    },
+    {
+      "area": "PUBLISHED",
+      "test": "Published source matches local: index.html",
+      "result": "PASS",
+      "detail": {
+        "status": 200,
+        "comparison": "Bytes compared with CRLF/LF normalized"
+      }
+    },
+    {
+      "area": "PUBLISHED",
+      "test": "Published source matches local: admin/login.html",
+      "result": "PASS",
+      "detail": {
+        "status": 200,
+        "comparison": "Bytes compared with CRLF/LF normalized"
+      }
+    },
+    {
+      "area": "PUBLISHED",
+      "test": "Published source matches local: admin/index.html",
+      "result": "PASS",
+      "detail": {
+        "status": 200,
+        "comparison": "Bytes compared with CRLF/LF normalized"
+      }
+    },
+    {
+      "area": "PUBLISHED",
+      "test": "Published source matches local: admin/js/supabase-client.js",
+      "result": "PASS",
+      "detail": {
+        "status": 200,
+        "comparison": "Bytes compared with CRLF/LF normalized"
+      }
+    },
+    {
+      "area": "VISUAL",
+      "test": "public desktop/tablet/mobile screenshot review",
+      "result": "PASS",
+      "detail": {
+        "widths": [
+          1440,
+          800,
+          390
+        ]
+      }
+    },
+    {
+      "area": "VISUAL",
+      "test": "login desktop/tablet/mobile screenshot review",
+      "result": "PASS",
+      "detail": {
+        "widths": [
+          1440,
+          800,
+          390
+        ]
+      }
+    },
+    {
+      "area": "VISUAL",
+      "test": "editor desktop/tablet/mobile screenshot review",
+      "result": "PASS",
+      "detail": {
+        "widths": [
+          1440,
+          800,
+          390
+        ]
+      }
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "cms-demo/hero/1c11f493-4116-4d7d-90c9-94dbc3340eb8.png",
+      "state": "REMOVED"
+    }
+  ],
+  "screenshots": [
+    {
+      "kind": "public",
+      "width": 1440,
+      "file": "C:\\Users\\Yenz\\AppData\\Local\\Temp\\vca-step13-screenshots\\public-1440.png"
+    },
+    {
+      "kind": "public",
+      "width": 800,
+      "file": "C:\\Users\\Yenz\\AppData\\Local\\Temp\\vca-step13-screenshots\\public-800.png"
+    },
+    {
+      "kind": "public",
+      "width": 390,
+      "file": "C:\\Users\\Yenz\\AppData\\Local\\Temp\\vca-step13-screenshots\\public-390.png"
+    },
+    {
+      "kind": "login",
+      "width": 1440,
+      "file": "C:\\Users\\Yenz\\AppData\\Local\\Temp\\vca-step13-screenshots\\login-1440.png"
+    },
+    {
+      "kind": "login",
+      "width": 800,
+      "file": "C:\\Users\\Yenz\\AppData\\Local\\Temp\\vca-step13-screenshots\\login-800.png"
+    },
+    {
+      "kind": "login",
+      "width": 390,
+      "file": "C:\\Users\\Yenz\\AppData\\Local\\Temp\\vca-step13-screenshots\\login-390.png"
+    },
+    {
+      "kind": "editor",
+      "width": 1440,
+      "file": "C:\\Users\\Yenz\\AppData\\Local\\Temp\\vca-step13-screenshots\\editor-1440.png"
+    },
+    {
+      "kind": "editor",
+      "width": 800,
+      "file": "C:\\Users\\Yenz\\AppData\\Local\\Temp\\vca-step13-screenshots\\editor-800.png"
+    },
+    {
+      "kind": "editor",
+      "width": 390,
+      "file": "C:\\Users\\Yenz\\AppData\\Local\\Temp\\vca-step13-screenshots\\editor-390.png"
+    }
+  ],
+  "writesStarted": true,
+  "restored": true,
+  "snapshot": {
+    "homepage": [
+      {
+        "id": 1,
+        "site_logo_url": "assets/vca_phils_logo.png",
+        "theme_primary_color": "#233B82",
+        "theme_secondary_color": "#98C2EC",
+        "theme_background_color": "#FFFFFF",
+        "theme_text_color": "#1F2937",
+        "theme_heading_font": "system-default",
+        "theme_body_font": "system-default",
+        "hero_eyebrow": "Victory Churches of Asia",
+        "hero_title": "VCA Philippines",
+        "hero_description": "Growing churches. Equipping leaders. Reaching communities with the Gospel of Jesus Christ.",
+        "hero_image_url": "assets/hero-default.webp",
+        "hero_button_text": "Learn More",
+        "hero_button_link": "#about",
+        "about_label": "Our Movement",
+        "about_title": "One Church. Many Communities.",
+        "about_description": "Victory Churches of Asia Philippines is a family of local churches committed to making disciples, developing leaders, planting churches, and serving communities across the nation.",
+        "about_image_url": "assets/movement.webp",
+        "footer_text": "\u00a9 2026 Victory Churches of Asia Philippines",
+        "created_at": "2026-09-21T07:13:02.926098+00:00",
+        "updated_at": "2026-10-01T01:22:02.824241+00:00"
+      }
+    ],
+    "announcements": [
+      {
+        "id": 4,
+        "homepage_id": 1,
+        "announcement_date": "September 2026",
+        "announcement_title": "Welcome to the VCA Philippines Website Demo",
+        "announcement_description": "This page is being used to demonstrate how website content may eventually be managed through a custom-built CMS.",
+        "sort_order": 1,
+        "created_at": "2026-09-25T06:17:43.956107+00:00",
+        "updated_at": "2026-09-25T06:17:43.956107+00:00"
+      }
+    ]
+  },
+  "finalIntegrity": {
+    "singletonRows": 1,
+    "homepageContentMatches": true,
+    "announcementsMatch": true,
+    "qaRows": 0,
+    "homepageUpdatedAtChanged": true,
+    "announcementUpdatedAtChanged": [
+      4
+    ]
+  },
+  "summary": {
+    "passed": 98,
+    "failed": 0,
+    "pending": 0,
+    "overall": "PASS"
+  },
+  "publishedVerification": {
+    "url": "https://yzcreativetech.github.io/cms-demo/",
+    "hydration": true,
+    "copyMatches": true,
+    "imagesRender": true,
+    "announcementsMatch": true,
+    "noEditingControls": true,
+    "demoLabel": true,
+    "noSession": true
+  },
+  "visualReview": {
+    "views": [
+      "public",
+      "login",
+      "editor"
+    ],
+    "widths": [
+      1440,
+      800,
+      390
+    ],
+    "findings": "No blocking layout issue observed"
+  },
+  "postRunVerification": {
+    "date": "2026-10-01T01:59:01.052490+00:00",
+    "homepageContentMatches": true,
+    "announcementsMatch": true,
+    "singletonRows": 1,
+    "qaRows": 0
+  },
+  "milestoneStatus": "COMPLETE"
+}

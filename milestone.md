@@ -1,4 +1,4 @@
-﻿# VCA Philippines CMS Demo
+﻿# VCA Philippines CMS Demo — COMPLETE
 ## Technical Roadmap
 
 ### Project Goal
@@ -199,18 +199,19 @@ Copy uses `textContent`; HTTP(S) image references and allowlisted button protoco
 **Secrets:** The tracked-file and reachable-history scan found no privileged secret candidates: no exposed service-role key, database password, or hard-coded admin password. Public Supabase URL and anon/publishable configuration are expected frontend values. No application or policy changes were needed; no credentials were logged or committed.
 
 # STEP 13 — End-to-End QA
-**Status: PENDING**
+**Status: COMPLETE**
 
-Exercise login, content edits, repeated announcements, history, Cancel, Restore Default, Save, image replacement, public hydration, and logout. Include failure/retry cases, browser console checks, database row checks, and visual QA for public, login, and editor pages at narrow and wide viewports.
+**Final acceptance: PASS — 98 checks passed, 0 failed, 0 pending (2026-10-01).** Evidence is recorded in `tests/step13-e2e-results.json` and `tests/step13-e2e-report.md`; the repeatable manual-login browser runner is `tests/step13-e2e.py` / `tests/step13-e2e.js`. No application or security-policy changes were required.
 
-**Acceptance:** The full demo workflow passes; saved changes and restored defaults appear publicly; one homepage row remains; announcement order and image paths remain valid; responsive layouts have no blocking overflow or errors.
+**Public/auth/editor:** Live public content mapping, all images, theme/button values, repository-subpath loading, and static fallback during a simulated read failure passed. Invalid login showed a safe error; manual admin login, authenticated reload, logout, and logged-out route guarding passed. Initial saved-state mapping, dirty detection, Undo/Redo, Cancel, confirmation-gated Restore Default, announcement Add/Edit/Done Editing/Delete, and hero local preview passed. Unsaved actions generated no database or Storage writes. Logo/movement controls were inspected.
 
-# STEP 14 — GitHub Pages Deployment
-**Status: PENDING**
+**Persistence:** A real UI Save persisted the temporary hero title, one `E2E-QA-TEMP` announcement, and one tiny valid hero image. Loading feedback, control locking, duplicate-submit prevention, clean saved state, and history reset passed. The public page reflected the saved changes; authenticated editor reload read the same persisted values. A second UI Save restored the title and deleted the QA announcement; authorized snapshot reconciliation restored the original image reference.
 
-Publish the approved demo after QA. Verify relative paths under the GitHub Pages repository subpath, Supabase Auth origin/redirect configuration, public data reads, CMS Save and upload, and visible SAMPLE ONLY labeling. Commit and deployment are separate review actions.
+**Cleanup/integrity:** Final live reads confirm exactly one homepage row and exact restoration of all original content, image references, announcement IDs, creation timestamps, and ordering. No `E2E-QA-TEMP` rows remain. Automatic `updated_at` values advanced for the homepage and existing announcement ID 4 during real saves; these expected metadata changes were recorded separately. The only uploaded object, `cms-demo/hero/1c11f493-4116-4d7d-90c9-94dbc3340eb8.png`, was manually removed and its absence confirmed by a cache-busted Storage 404 / `NoSuchKey` response. No artifacts from this QA run remain.
 
-**Acceptance:** Public and admin pages load online; login and protected editor work; edits, images, and restore flow work; static fallback and demo labels remain; no privileged secret is deployed.
+**Responsive/published acceptance:** Public, login, and editor pages passed all 18 layout checks at 1440, 1200, 1024, 800, 650, and 390 CSS pixels. Desktop/tablet/mobile screenshot review found no blocking layout issues. The existing `https://yzcreativetech.github.io/cms-demo/` public site passed fresh logged-out browser checks for live hydration, images, announcements, demo labeling, and read-only behavior; public/login/editor HTML and frontend configuration matched local files. Authenticated editing was tested through the local QA origin against live Supabase, not through a separate published-origin login. No new deployment was performed.
+
+**Project completion:** VCA Philippines CMS Demo — COMPLETE. Step 13 is the final milestone; there is no Step 14. Prior milestone history is preserved. No credentials were stored in the QA source/results, and nothing was staged, committed, or pushed by this QA task.
 
 ---
 
@@ -230,8 +231,7 @@ Publish the approved demo after QA. Verify relative paths under the GitHub Pages
 | 10 | Image Upload | COMPLETE |
 | 11 | Public Homepage ↔ Supabase | COMPLETE |
 | 12 | Security QA | COMPLETE |
-| 13 | End-to-End QA | PENDING |
-| 14 | GitHub Pages Deployment | PENDING |
+| 13 | End-to-End QA (final milestone) | COMPLETE |
 
 ## Out of Scope
 
