@@ -186,11 +186,17 @@ Copy uses `textContent`; HTTP(S) image references and allowlisted button protoco
 
 
 # STEP 12 — Security QA
-**Status: NEXT**
+**Status: COMPLETE**
 
-Test anonymous and admin identities directly against database and Storage policies, including announcement writes, not only against hidden UI controls. Test login, logout, direct admin route access, session expiry, and frontend secret exposure.
+**Acceptance: PASS.** The anonymous run passed 25 checks; the authenticated admin run passed all 44 checks, including repeated anonymous checks. Final evidence and sanitized results are under `tests/step12-security-report.md` and `tests/step12-*-results.json`.
 
-**Acceptance:** Public reads work; anonymous database writes and uploads fail; authorized admin writes and uploads work; logged-out editor access is blocked; no privileged secrets are exposed.
+**Database:** Anonymous homepage and announcement SELECT are allowed; anonymous UPDATE/INSERT/DELETE are blocked (HTTP 401 / 42501). Authorized admin homepage SELECT/UPDATE and announcement SELECT/INSERT/UPDATE/DELETE are allowed. The temporary `SECURITY-QA-TEMP` announcement was removed; a final live query confirmed no QA rows remain and exactly one homepage row (ID 1). Before/after snapshots confirmed real homepage and announcement content remained unchanged. Homepage `updated_at` may have advanced because the authorized no-op UPDATE exercised the real update path.
+
+**Storage:** Public image reads and authorized admin valid-image uploads passed. Anonymous valid-image upload was blocked by RLS. Unsupported MIME was rejected; oversized admin upload was rejected by size validation (Storage code 413). The sole recorded QA object, `cms-demo/hero/security-qa-1790817637373-Admin-valid.png`, was manually removed: a final cache-busted live read confirmed Storage 404 / `NoSuchKey`. No objects from the recorded QA runs remain; this reconciles the QA artifact list rather than claiming a privileged bucket-wide inventory. Existing Storage UPDATE/DELETE restrictions were preserved.
+
+**Auth/session:** Valid admin login, authenticated refresh, and logout passed. The existing admin's invalid password was rejected. Logged-out direct admin access redirected to login; an invalid/stale local session was blocked and an invalid-token write rejected. Exposed Save/upload controls while logged out did not bypass backend security.
+
+**Secrets:** The tracked-file and reachable-history scan found no privileged secret candidates: no exposed service-role key, database password, or hard-coded admin password. Public Supabase URL and anon/publishable configuration are expected frontend values. No application or policy changes were needed; no credentials were logged or committed.
 
 # STEP 13 — End-to-End QA
 **Status: PENDING**
@@ -223,7 +229,7 @@ Publish the approved demo after QA. Verify relative paths under the GitHub Pages
 | 9 | Content Load / Save | COMPLETE |
 | 10 | Image Upload | COMPLETE |
 | 11 | Public Homepage ↔ Supabase | COMPLETE |
-| 12 | Security QA | NEXT |
+| 12 | Security QA | COMPLETE |
 | 13 | End-to-End QA | PENDING |
 | 14 | GitHub Pages Deployment | PENDING |
 

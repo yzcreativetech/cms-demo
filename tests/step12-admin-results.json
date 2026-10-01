@@ -1,0 +1,289 @@
+{
+  "date": "2026-10-01T01:22:20.211Z",
+  "mode": "admin",
+  "checks": [
+    {
+      "test": "Anonymous homepage SELECT",
+      "expected": "ALLOWED",
+      "result": "PASS",
+      "status": 200,
+      "code": null,
+      "returnedRows": 1
+    },
+    {
+      "test": "Anonymous announcement SELECT",
+      "expected": "ALLOWED",
+      "result": "PASS",
+      "status": 200,
+      "returnedRows": 1
+    },
+    {
+      "test": "Anonymous homepage UPDATE (existing value)",
+      "expected": "BLOCKED",
+      "result": "PASS",
+      "status": 401,
+      "code": "42501",
+      "returnedRows": null
+    },
+    {
+      "test": "Anonymous homepage INSERT",
+      "expected": "BLOCKED",
+      "result": "PASS",
+      "status": 401,
+      "code": "42501",
+      "returnedRows": null
+    },
+    {
+      "test": "Anonymous homepage DELETE (absent id)",
+      "expected": "BLOCKED",
+      "result": "PASS",
+      "status": 401,
+      "code": "42501",
+      "returnedRows": null
+    },
+    {
+      "test": "Anonymous announcement INSERT",
+      "expected": "BLOCKED",
+      "result": "PASS",
+      "status": 401,
+      "code": "42501",
+      "returnedRows": null
+    },
+    {
+      "test": "Anonymous announcement UPDATE (existing value)",
+      "expected": "BLOCKED",
+      "result": "PASS",
+      "status": 401,
+      "code": "42501",
+      "returnedRows": null
+    },
+    {
+      "test": "Anonymous announcement DELETE (absent id)",
+      "expected": "BLOCKED",
+      "result": "PASS",
+      "status": 401,
+      "code": "42501",
+      "returnedRows": null
+    },
+    {
+      "test": "Anonymous published image read",
+      "expected": "ALLOWED",
+      "result": "PASS",
+      "status": 200,
+      "contentType": "application/octet-stream"
+    },
+    {
+      "test": "QA upload fixture decodes",
+      "expected": "VALID PNG",
+      "result": "PASS",
+      "bytes": 88
+    },
+    {
+      "test": "Anonymous Storage valid",
+      "expected": "BLOCKED",
+      "result": "PASS",
+      "status": "403",
+      "reason": "row-level security"
+    },
+    {
+      "test": "Anonymous Storage mime",
+      "expected": "BLOCKED",
+      "result": "PASS",
+      "status": "415",
+      "reason": "MIME validation"
+    },
+    {
+      "test": "Anonymous Storage oversized",
+      "expected": "BLOCKED",
+      "result": "PASS",
+      "status": "403",
+      "reason": "row-level security"
+    },
+    {
+      "test": "Frontend invalid MIME validation",
+      "expected": "BLOCKED",
+      "result": "PASS"
+    },
+    {
+      "test": "Frontend oversized validation",
+      "expected": "BLOCKED",
+      "result": "PASS"
+    },
+    {
+      "test": "Logged-out direct admin route",
+      "expected": "REDIRECTED",
+      "result": "PASS"
+    },
+    {
+      "test": "Invalid credentials login",
+      "expected": "REJECTED; SAFE ERROR",
+      "result": "PASS",
+      "status": 400
+    },
+    {
+      "test": "Invalid local session direct admin route",
+      "expected": "REDIRECTED",
+      "result": "PASS"
+    },
+    {
+      "test": "Invalid token protected database write",
+      "expected": "BLOCKED",
+      "result": "PASS",
+      "status": 401
+    },
+    {
+      "test": "Logged-out exposed editor Save",
+      "expected": "BLOCKED",
+      "result": "PASS"
+    },
+    {
+      "test": "Logged-out exposed editor image upload",
+      "expected": "BLOCKED",
+      "result": "PASS"
+    },
+    {
+      "test": "Real homepage content unchanged",
+      "expected": "UNCHANGED",
+      "result": "PASS"
+    },
+    {
+      "test": "Homepage timestamp",
+      "expected": "UNCHANGED",
+      "result": "PASS"
+    },
+    {
+      "test": "Real announcement rows unchanged",
+      "expected": "UNCHANGED",
+      "result": "PASS"
+    },
+    {
+      "test": "QA announcement cleanup",
+      "expected": "NO QA ROWS",
+      "result": "PASS"
+    },
+    {
+      "test": "Valid admin login and editor access",
+      "expected": "ALLOWED",
+      "result": "PASS"
+    },
+    {
+      "test": "Existing admin invalid password",
+      "expected": "REJECTED",
+      "result": "PASS",
+      "status": 400
+    },
+    {
+      "test": "Authenticated browser refresh",
+      "expected": "EDITOR ACCESSIBLE",
+      "result": "PASS"
+    },
+    {
+      "test": "Admin homepage SELECT",
+      "expected": "ALLOWED",
+      "result": "PASS",
+      "status": 200,
+      "code": null,
+      "returnedRows": 1
+    },
+    {
+      "test": "Admin announcement SELECT",
+      "expected": "ALLOWED",
+      "result": "PASS",
+      "status": 200
+    },
+    {
+      "test": "Admin homepage UPDATE (existing value)",
+      "expected": "ALLOWED",
+      "result": "PASS",
+      "status": 200,
+      "code": null,
+      "returnedRows": 1
+    },
+    {
+      "test": "Admin announcement INSERT",
+      "expected": "ALLOWED",
+      "result": "PASS",
+      "status": 201,
+      "code": null,
+      "returnedRows": 1
+    },
+    {
+      "test": "Admin announcement UPDATE",
+      "expected": "ALLOWED",
+      "result": "PASS",
+      "status": 200,
+      "code": null,
+      "returnedRows": 1
+    },
+    {
+      "test": "Admin announcement DELETE",
+      "expected": "ALLOWED",
+      "result": "PASS",
+      "status": 200,
+      "code": null,
+      "returnedRows": 1
+    },
+    {
+      "test": "Admin published image read",
+      "expected": "ALLOWED",
+      "result": "PASS",
+      "status": 200
+    },
+    {
+      "test": "Admin Storage valid",
+      "expected": "ALLOWED",
+      "result": "PASS",
+      "status": null,
+      "reason": "accepted",
+      "path": "cms-demo/hero/security-qa-1790817637373-Admin-valid.png"
+    },
+    {
+      "test": "Admin Storage mime",
+      "expected": "BLOCKED",
+      "result": "PASS",
+      "status": "415",
+      "reason": "MIME validation"
+    },
+    {
+      "test": "Admin Storage oversized",
+      "expected": "BLOCKED",
+      "result": "PASS",
+      "status": "413",
+      "reason": "size validation"
+    },
+    {
+      "test": "Real homepage content unchanged",
+      "expected": "UNCHANGED",
+      "result": "PASS"
+    },
+    {
+      "test": "Homepage timestamp",
+      "expected": "MAY ADVANCE AFTER NO-OP UPDATE",
+      "result": "PASS"
+    },
+    {
+      "test": "Real announcement rows unchanged",
+      "expected": "UNCHANGED",
+      "result": "PASS"
+    },
+    {
+      "test": "QA announcement cleanup",
+      "expected": "NO QA ROWS",
+      "result": "PASS"
+    },
+    {
+      "test": "Logout clears session and redirects",
+      "expected": "SIGNED OUT",
+      "result": "PASS",
+      "status": 204
+    },
+    {
+      "test": "Logged-out direct route after logout",
+      "expected": "REDIRECTED",
+      "result": "PASS"
+    }
+  ],
+  "artifacts": [
+    "cms-demo/hero/security-qa-1790817637373-Admin-valid.png"
+  ]
+}
